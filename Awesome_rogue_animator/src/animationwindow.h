@@ -3,6 +3,7 @@
 
 #include "animationlist.h"
 #include "animationpreview.h"
+#include "animationtextureview.h"
 #include <QWidget>
 
 class AnimationWindow : public QWidget
@@ -19,6 +20,7 @@ public slots:
 private:
     AnimationList * m_animationList;
     AnimationPreview * m_animationPreview;
+    AnimationTextureView * m_animationTextureView;
 
 };
 

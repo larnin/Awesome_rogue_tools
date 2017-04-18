@@ -8,6 +8,11 @@ AnimationWindow::AnimationWindow(QWidget *parent)
 {
     m_animationList = new AnimationList();
     m_animationPreview = new AnimationPreview();
+    m_animationTextureView = new AnimationTextureView();
+
+    QWidget * verticalLine = new QWidget();
+    verticalLine->setFixedWidth(1);
+    verticalLine->setStyleSheet(QString("background-color: #c0c0c0;"));
 
     QGroupBox * previewBox = new QGroupBox("Preview");
     QVBoxLayout * previewLayout = new QVBoxLayout();
@@ -18,8 +23,16 @@ AnimationWindow::AnimationWindow(QWidget *parent)
     layout->addWidget(m_animationList, 4);
     layout->addWidget(previewBox, 1);
 
-    setLayout(layout);
+    QHBoxLayout * centralLayout = new QHBoxLayout();
+    centralLayout->addWidget(m_animationTextureView, 1);
+    centralLayout->addWidget(verticalLine);
+    centralLayout->addLayout(layout);
+
+    setLayout(centralLayout);
 
     connect(m_animationList, SIGNAL(changeAnimation(Animation)), m_animationPreview, SLOT(onAnimationChange(Animation)));
     connect(m_animationList, SIGNAL(changeTexture(Texture)), m_animationPreview, SLOT(onTextureChange(Texture)));
+    connect(m_animationList, SIGNAL(changeAnimation(Animation)), m_animationTextureView, SLOT(onAnimationChange(Animation)));
+    connect(m_animationList, SIGNAL(changeTexture(Texture)), m_animationTextureView, SLOT(onTextureChange(Texture)));
+    connect(m_animationTextureView, SIGNAL(changeFrame(unsigned int, Frame)), m_animationList, SLOT(frameChanged(unsigned int,Frame)));
 }

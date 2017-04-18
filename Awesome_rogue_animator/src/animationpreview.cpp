@@ -7,6 +7,7 @@ AnimationPreview::AnimationPreview(QWidget * parent)
     , m_backgroundColor(sf::Color::White)
 {
     setMinimumHeight(100);
+    setMinimumWidth(100);
 }
 
 void AnimationPreview::OnUpdate()
@@ -68,10 +69,6 @@ void AnimationPreview::updateRect()
 
 void AnimationPreview::updateView()
 {
-    /*sf::View v(RenderWindow::getView());
-    v.setSize(RenderWindow::getSize().x, RenderWindow::getSize().y);
-    RenderWindow::setView(v);*/
-
     const float margin(5);
     sf::FloatRect rectWithMargin(m_rect.left - margin, m_rect.top - margin, m_rect.width + 2*margin, m_rect.height + 2*margin);
     auto windowSize(RenderWindow::getSize());
