@@ -1,0 +1,6 @@
+Thumbs.db
+backup/
+backups/
+bin/
+*.pro.user*
+build-*
