@@ -57,10 +57,10 @@ AnimationList::AnimationList(QWidget *parent)
     timeLayout->addWidget(m_timeWidget, 1);
 
     m_offsetX = new QDoubleSpinBox();
-    m_offsetX->setDecimals(1);
+    m_offsetX->setDecimals(0);
     m_offsetX->setRange(-1000, 1000);
     m_offsetY = new QDoubleSpinBox();
-    m_offsetY->setDecimals(1);
+    m_offsetY->setDecimals(0);
     m_offsetY->setRange(-1000, 1000);
     QHBoxLayout * offsetLayout = new QHBoxLayout();
     offsetLayout->addWidget(new QLabel("X: "));
@@ -132,6 +132,7 @@ void AnimationList::frameChanged(unsigned int frameID, Frame f)
     m_animations[index].frames[frameID] = f;
     if(int(frameID) == currentFrameIndex())
         updateFrameData(index, frameID);
+    emit changeAnimation(m_animations[index]);
 }
 
 int AnimationList::currentAnimationIndex() const
@@ -265,6 +266,11 @@ void AnimationList::onAnimationListIndexChange(int)
 {
     updateSingleShoot();
     updateFrameList(false);
+
+    auto index(currentAnimationIndex());
+    if(index < 0 || index >= int(m_animations.size()))
+        return;
+    emit changeAnimation(m_animations[index]);
 }
 
 void AnimationList::onFrameListIndexChange(int newIndex)
@@ -403,7 +409,7 @@ void AnimationList::onRightClickFrames(QPoint point)
 
     if(action == aAdd)
     {
-        anim.frames.push_back(Frame(0.1, sf::FloatRect(), sf::Vector2f()));
+        anim.frames.push_back(Frame(0.1, sf::FloatRect(0, 0, 100, 100), sf::Vector2f(50, 50)));
         updateFrameList(true);
     }
     else if(action == aDel)

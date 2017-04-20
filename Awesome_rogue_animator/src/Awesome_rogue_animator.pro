@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     utilities.cpp \
     animationwindow.cpp \
     animationpreview.cpp \
-    animationtextureview.cpp
+    animationtextureview.cpp \
+    quadrender.cpp
 
 HEADERS  += \
     qsfmlcanvas.h \
@@ -30,7 +31,8 @@ HEADERS  += \
     animationwindow.h \
     animationpreview.h \
     ressource.h \
-    animationtextureview.h
+    animationtextureview.h \
+    quadrender.h
 
 CONFIG += c++14
 #QMAKE_CXXFLAGS += -Wsign-conversion
