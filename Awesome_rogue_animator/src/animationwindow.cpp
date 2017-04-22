@@ -35,4 +35,11 @@ AnimationWindow::AnimationWindow(QWidget *parent)
     connect(m_animationList, SIGNAL(changeAnimation(Animation)), m_animationTextureView, SLOT(onAnimationChange(Animation)));
     connect(m_animationList, SIGNAL(changeTexture(Texture)), m_animationTextureView, SLOT(onTextureChange(Texture)));
     connect(m_animationTextureView, SIGNAL(changeFrame(unsigned int, Frame)), m_animationList, SLOT(frameChanged(unsigned int,Frame)));
+    connect(m_animationList, SIGNAL(animationAdded()), this, SIGNAL(animationAdded()));
+    connect(m_animationList, SIGNAL(animationDeleted(uint)), this, SIGNAL(animationDeleted(uint)));
+}
+
+void AnimationWindow::onAnimationsSet()
+{
+    m_animationList->onAnimationsSet();
 }

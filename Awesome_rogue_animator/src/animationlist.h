@@ -18,12 +18,11 @@ public:
     AnimationList(QWidget *parent = nullptr);
     virtual ~AnimationList() = default;
 
-    void setAll(const std::vector<Animation> & anims);
-    inline const std::vector<Animation> & animations() const { return m_animations;}
-
 signals:
     void changeAnimation(Animation);
     void changeTexture(Texture);
+    void animationAdded();
+    void animationDeleted(unsigned int index);
 
 public slots:
     void frameChanged(unsigned int frameID, Frame f);
@@ -34,6 +33,7 @@ public slots:
     void onRightClickAnimations(QPoint point);
     void onRightClickFrames(QPoint point);
     void onSelectTexture();
+    void onAnimationsSet();
 
 private:
     int currentAnimationIndex() const;
@@ -43,7 +43,6 @@ private:
     void updateFrameList(bool notChangeIndex);
     void updateSingleShoot();
 
-    std::vector<Animation> m_animations;
     Texture m_texture;
 
     QListWidget * m_animationList;

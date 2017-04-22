@@ -20,7 +20,22 @@ SOURCES += main.cpp\
     animationwindow.cpp \
     animationpreview.cpp \
     animationtextureview.cpp \
-    quadrender.cpp
+    quadrender.cpp \
+    transition.cpp \
+    Conditions/andcondition.cpp \
+    Conditions/animationfinishedcondition.cpp \
+    Conditions/condition.cpp \
+    Conditions/notcondition.cpp \
+    Conditions/orcondition.cpp \
+    Conditions/propertyequalcondition.cpp \
+    Conditions/propertyinferiorcondition.cpp \
+    Conditions/propertyinferiororequalcondition.cpp \
+    Conditions/propertynotequalcondition.cpp \
+    Conditions/propertysuperiorcondition.cpp \
+    Conditions/propertysuperiororequalcondition.cpp \
+    Conditions/waitafteractivecondition.cpp \
+    Conditions/waitcondition.cpp \
+    datas.cpp
 
 HEADERS  += \
     qsfmlcanvas.h \
@@ -32,7 +47,22 @@ HEADERS  += \
     animationpreview.h \
     ressource.h \
     animationtextureview.h \
-    quadrender.h
+    quadrender.h \
+    transition.h \
+    Conditions/andcondition.h \
+    Conditions/animationfinishedcondition.h \
+    Conditions/condition.h \
+    Conditions/notcondition.h \
+    Conditions/orcondition.h \
+    Conditions/propertyequalcondition.h \
+    Conditions/propertyinferiorcondition.h \
+    Conditions/propertyinferiororequalcondition.h \
+    Conditions/propertynotequalcondition.h \
+    Conditions/propertysuperiorcondition.h \
+    Conditions/propertysuperiororequalcondition.h \
+    Conditions/waitafteractivecondition.h \
+    Conditions/waitcondition.h \
+    datas.h
 
 CONFIG += c++14
 #QMAKE_CXXFLAGS += -Wsign-conversion

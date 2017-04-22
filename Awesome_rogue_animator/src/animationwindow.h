@@ -14,8 +14,10 @@ public:
     virtual ~AnimationWindow() = default;
 
 signals:
-
+    void animationAdded();
+    void animationDeleted(unsigned int index);
 public slots:
+    void onAnimationsSet();
 
 private:
     AnimationList * m_animationList;

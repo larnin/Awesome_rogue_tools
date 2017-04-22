@@ -1,5 +1,6 @@
 #include "animationlist.h"
 #include "utilities.h"
+#include "datas.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -116,23 +117,22 @@ AnimationList::AnimationList(QWidget *parent)
     connect(m_frameList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClickFrames(QPoint)));
 }
 
-void AnimationList::setAll(const std::vector<Animation> & anims)
+void AnimationList::onAnimationsSet()
 {
-    m_animations = anims;
     updateAnimationList();
 }
 
 void AnimationList::frameChanged(unsigned int frameID, Frame f)
 {
     auto index(currentAnimationIndex());
-    if(index < 0 || index >= int(m_animations.size()))
+    if(index < 0 || index >= int(Datas::instance().size()))
         return;
-    if(frameID >= m_animations[index].frames.size())
+    if(frameID >= Datas::instance()[index].animation.frames.size())
         return;
-    m_animations[index].frames[frameID] = f;
+    Datas::instance()[index].animation.frames[frameID] = f;
     if(int(frameID) == currentFrameIndex())
         updateFrameData(index, frameID);
-    emit changeAnimation(m_animations[index]);
+    emit changeAnimation(Datas::instance()[index].animation);
 }
 
 int AnimationList::currentAnimationIndex() const
@@ -166,7 +166,7 @@ void AnimationList::updateFrameData(int animationID, int frameID)
 
     if(enable)
     {
-        const Frame & f(m_animations[animationID].frames[frameID]);
+        const Frame & f(Datas::instance()[animationID].animation.frames[frameID]);
         m_timeWidget->setValue(f.time);
         m_rectWidth->setValue(f.texRect.width);
         m_rectHeight->setValue(f.texRect.height);
@@ -190,18 +190,18 @@ void AnimationList::updateAnimationList()
     m_animationList->blockSignals(true);
 
     m_animationList->clear();
-    for(const auto & a : m_animations)
-        m_animationList->addItem(QString::fromStdString(a.name));
+    for(const auto & a : Datas::instance())
+        m_animationList->addItem(QString::fromStdString(a.animation.name));
 
-    if(!m_animations.empty())
+    if(!Datas::instance().empty())
         m_animationList->setCurrentRow(0);
 
     updateFrameList(false);
     updateSingleShoot();
 
     auto index(currentAnimationIndex());
-    if(index >= 0 && index <= int(m_animations.size()))
-        emit changeAnimation(m_animations[index]);
+    if(index >= 0 && index <= int(Datas::instance().size()))
+        emit changeAnimation(Datas::instance()[index].animation);
 
     m_animationList->blockSignals(false);
 }
@@ -214,12 +214,12 @@ void AnimationList::updateFrameList(bool notChangeIndex)
 
     m_frameList->clear();
     auto index(currentAnimationIndex());
-    if(index >= 0 && index <int(m_animations.size()))
+    if(index >= 0 && index <int(Datas::instance().size()))
     {
-        for(const Frame & f : m_animations[index].frames)
+        for(const Frame & f : Datas::instance()[index].animation.frames)
             m_frameList->addItem("Frame " + QString::number(m_frameList->count() + 1) + " - " + QString::number(f.time));
 
-        if(!m_animations[index].frames.empty())
+        if(!Datas::instance()[index].animation.frames.empty())
             m_frameList->setCurrentRow(0);
     }
 
@@ -236,10 +236,10 @@ void AnimationList::updateSingleShoot()
     m_single->blockSignals(true);
 
    auto index(currentAnimationIndex());
-   bool enable = index >= 0 && index < int(m_animations.size());
+   bool enable = index >= 0 && index < int(Datas::instance().size());
    m_single->setEnabled(enable);
    if(enable)
-       m_single->setChecked(m_animations[index].singleShoot);
+       m_single->setChecked(Datas::instance()[index].animation.singleShoot);
 
     m_single->blockSignals(false);
 }
@@ -248,17 +248,17 @@ void AnimationList::onFrameValueChange()
 {
     auto animID(currentAnimationIndex());
     auto frameID(currentFrameIndex());
-    if(animID < 0 || animID >= int(m_animations.size()))
+    if(animID < 0 || animID >= int(Datas::instance().size()))
         return;
-    if(frameID < 0 || frameID >= int(m_animations[animID].frames.size()))
+    if(frameID < 0 || frameID >= int(Datas::instance()[animID].animation.frames.size()))
         return;
 
-    Frame & f(m_animations[animID].frames[frameID]);
+    Frame & f(Datas::instance()[animID].animation.frames[frameID]);
     f.time = m_timeWidget->value();
     f.texRect = sf::FloatRect(m_rectLeft->value(), m_rectTop->value(), m_rectWidth->value(), m_rectHeight->value());
     f.offset = sf::Vector2f(m_offsetX->value(), m_offsetY->value());
 
-    emit changeAnimation(m_animations[animID]);
+    emit changeAnimation(Datas::instance()[animID].animation);
     updateFrameList(true);
 }
 
@@ -268,9 +268,9 @@ void AnimationList::onAnimationListIndexChange(int)
     updateFrameList(false);
 
     auto index(currentAnimationIndex());
-    if(index < 0 || index >= int(m_animations.size()))
+    if(index < 0 || index >= int(Datas::instance().size()))
         return;
-    emit changeAnimation(m_animations[index]);
+    emit changeAnimation(Datas::instance()[index].animation);
 }
 
 void AnimationList::onFrameListIndexChange(int newIndex)
@@ -281,11 +281,11 @@ void AnimationList::onFrameListIndexChange(int newIndex)
 void AnimationList::onSingleShootChange()
 {
     auto index(currentAnimationIndex());
-    if(index < 0 || index >= int(m_animations.size()))
+    if(index < 0 || index >= int(Datas::instance().size()))
         return;
-    m_animations[index].singleShoot = m_single->isChecked();
+    Datas::instance()[index].animation.singleShoot = m_single->isChecked();
 
-    emit changeAnimation(m_animations[index]);
+    emit changeAnimation(Datas::instance()[index].animation);
 }
 
 void AnimationList::onSelectTexture()
@@ -303,15 +303,16 @@ void AnimationList::onRightClickAnimations(QPoint point)
 {
     QPoint globalPos(m_animationList->viewport()->mapToGlobal(point));
 
-    QAction *aAdd(nullptr), *aDel(nullptr), *aChange(nullptr), *aExport(nullptr), *aImport(nullptr);
+    QAction *aAdd(nullptr), *aDel(nullptr), *aChange(nullptr), *aExport(nullptr), *aImport(nullptr), *aDuplique(nullptr);
     QMenu menu;
     aAdd = menu.addAction("Ajouter une animation");
 
     auto index(currentAnimationIndex());
-    if(index >= 0 && index < int(m_animations.size()))
+    if(index >= 0 && index < int(Datas::instance().size()))
     {
         aDel = menu.addAction("Suprimer l'animation");
         aChange = menu.addAction("Renommer l'animation");
+        aDuplique = menu.addAction("Dupliquer l'animation");
         aExport = menu.addAction("Exporter l'animation");
     }
 
@@ -327,44 +328,59 @@ void AnimationList::onRightClickAnimations(QPoint point)
         QString name(QInputDialog::getText(this, "Ajouter une animation", "Nom de la nouvelle animation", QLineEdit::Normal, "", &ok));
         if(!ok || name.isEmpty())
             return;
-        m_animations.push_back(Animation());
-        m_animations.back().name = name.toStdString();
+        Datas::instance().emplace_back();
+        Datas::instance().back().animation.name = name.toStdString();
         updateAnimationList();
-        m_animationList->setCurrentRow(m_animations.size()-1);
+        m_animationList->setCurrentRow(Datas::instance().size()-1);
+        emit animationAdded();
     }
     else if(action == aDel)
     {
-        if(index < 0 || index >= int(m_animations.size()))
+        if(index < 0 || index >= int(Datas::instance().size()))
             return;
-        int result(QMessageBox::question(this, "Supprimer", "Etes vous sur de vouloir supprimer l'animation " + QString::fromStdString(m_animations[index].name) + " ?", QMessageBox::Yes, QMessageBox::No));
+        int result(QMessageBox::question(this, "Supprimer", "Etes vous sur de vouloir supprimer l'animation " + QString::fromStdString(Datas::instance()[index].animation.name) + " ?\nCeci supprimera aussi l'etat qui y est associé.", QMessageBox::Yes, QMessageBox::No));
         if(result != QMessageBox::Yes)
             return;
-        m_animations.erase(std::next(m_animations.begin(), index));
+        Datas::instance().erase(std::next(Datas::instance().begin(), index));
         updateAnimationList();
+        emit animationDeleted(index);
 
     }
     else if(action == aChange)
     {
-        if(index < 0 || index >= int(m_animations.size()))
+        if(index < 0 || index >= int(Datas::instance().size()))
             return;
         bool ok = false;
         QString name(QInputDialog::getText(this, "Ajouter une animation", "Nom de la nouvelle animation", QLineEdit::Normal, "", &ok));
         if(!ok || name.isEmpty())
             return;
-        m_animations[index].name = name.toStdString();
+        Datas::instance()[index].animation.name = name.toStdString();
+        updateAnimationList();
+    }
+    else if(action == aDuplique)
+    {
+        if(index < 0 || index >= int(Datas::instance().size()))
+            return;
+        bool ok = false;
+        QString name(QInputDialog::getText(this, "Dupliquer l'animation" + QString::fromStdString(Datas::instance()[index].animation.name), "Nom de la nouvelle animation", QLineEdit::Normal, "", &ok));
+        if(!ok || name.isEmpty())
+            return;
+        Datas::instance().emplace_back();
+        Datas::instance().back().animation = Datas::instance()[index].animation;
+        Datas::instance().back().animation.name = name.toStdString();
         updateAnimationList();
     }
     else if(action == aExport)
     {
-        if(index < 0 || index >= int(m_animations.size()))
+        if(index < 0 || index >= int(Datas::instance().size()))
             return;
-        QString name = QFileDialog::getSaveFileName(this, "Sauvegarder l'animation " + QString::fromStdString(m_animations[index].name));
+        QString name = QFileDialog::getSaveFileName(this, "Sauvegarder l'animation " + QString::fromStdString(Datas::instance()[index].animation.name));
         if(name.isEmpty())
             return;
         if(!name.endsWith(".json"))
             name.append(".json");
 
-        save(name, QJsonDocument(toJson(m_animations[index])));
+        save(name, QJsonDocument(toJson(Datas::instance()[index].animation)));
     }
     else if(action == aImport)
     {
@@ -374,7 +390,8 @@ void AnimationList::onRightClickAnimations(QPoint point)
         QJsonDocument doc = load(name);
         if(!doc.isObject())
             return;
-        m_animations.push_back(toAnimation(doc.object()));
+        Datas::instance().emplace_back();
+        Datas::instance().back().animation = toAnimation(doc.object());
         updateAnimationList();
     }
 }
@@ -382,9 +399,9 @@ void AnimationList::onRightClickAnimations(QPoint point)
 void AnimationList::onRightClickFrames(QPoint point)
 {
     auto indexAnimation = currentAnimationIndex();
-    if(indexAnimation < 0 || indexAnimation >= int(m_animations.size()))
+    if(indexAnimation < 0 || indexAnimation >= int(Datas::instance().size()))
         return;
-    Animation & anim(m_animations[indexAnimation]);
+    Animation & anim(Datas::instance()[indexAnimation].animation);
 
     QPoint globalPos(m_frameList->viewport()->mapToGlobal(point));
 
