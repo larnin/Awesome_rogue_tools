@@ -103,6 +103,8 @@ public:
         return false;
     }
 
+    std::string name() const { return m_fileName;}
+
 private:
 
     void freeMyRessource()
