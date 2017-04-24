@@ -3,7 +3,7 @@
 
 #include "ressource.h"
 #include "animation.h"
-#include "qsfmlcanvas.h"
+#include "UI/qsfmlcanvas.h"
 #include <SFML/System/Vector2.hpp>
 
 class AnimationTextureView : public QSFMLCanvas

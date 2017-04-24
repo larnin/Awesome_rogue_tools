@@ -356,6 +356,7 @@ void AnimationList::onRightClickAnimations(QPoint point)
             return;
         Datas::instance()[index].animation.name = name.toStdString();
         updateAnimationList();
+        emit animationRenamed(index);
     }
     else if(action == aDuplique)
     {
@@ -369,6 +370,7 @@ void AnimationList::onRightClickAnimations(QPoint point)
         Datas::instance().back().animation = Datas::instance()[index].animation;
         Datas::instance().back().animation.name = name.toStdString();
         updateAnimationList();
+        emit animationAdded();
     }
     else if(action == aExport)
     {
@@ -393,6 +395,7 @@ void AnimationList::onRightClickAnimations(QPoint point)
         Datas::instance().emplace_back();
         Datas::instance().back().animation = toAnimation(doc.object());
         updateAnimationList();
+        emit animationAdded();
     }
 }
 

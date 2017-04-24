@@ -23,6 +23,7 @@ signals:
     void changeTexture(Texture);
     void animationAdded();
     void animationDeleted(unsigned int index);
+    void animationRenamed(unsigned int index);
 
 public slots:
     void frameChanged(unsigned int frameID, Frame f);

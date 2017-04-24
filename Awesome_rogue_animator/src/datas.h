@@ -4,12 +4,14 @@
 #include "animation.h"
 #include "transition.h"
 #include "ressource.h"
+#include <SFML/System/Vector2.hpp>
 #include <vector>
 
 struct State
 {
     std::vector<Transition> transitions;
     Animation animation;
+    sf::Vector2f pos;
 };
 
 class Datas : private std::vector<State>

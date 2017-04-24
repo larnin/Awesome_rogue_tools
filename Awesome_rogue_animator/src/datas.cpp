@@ -20,6 +20,8 @@ void Datas::saveDatas(const QString & filename)
         for(const Transition & t : s.transitions)
             transitions.append(t.toJson());
         anim.insert("transitions", transitions);
+        anim.insert("posX", s.pos.x);
+        anim.insert("posy", s.pos.y);
         animations.append(anim);
     }
     object.insert("animations", animations);
@@ -36,10 +38,12 @@ void Datas::loadDatas(const QString & filename)
     m_texture.load(object["texture"].toString().toStdString());
     for(const auto & value : object["animations"].toArray())
     {
-
+        auto objState(value.toObject());
         emplace_back();
-        back().animation = toAnimation(value.toObject()["animation"].toObject());
-        for(const auto & transition : value.toObject()["transitions"].toArray())
+        back().animation = toAnimation(objState["animation"].toObject());
+        for(const auto & transition : objState["transitions"].toArray())
             back().transitions.emplace_back(transition.toObject());
+        back().pos.x = objState["posX"].toDouble();
+        back().pos.y = objState["posY"].toDouble();
     }
 }

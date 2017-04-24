@@ -1,7 +1,7 @@
 #ifndef ANIMATIONPREVIEW_H
 #define ANIMATIONPREVIEW_H
 
-#include "qsfmlcanvas.h"
+#include "UI/qsfmlcanvas.h"
 #include "animation.h"
 #include "ressource.h"
 #include <SFML/Graphics/Color.hpp>

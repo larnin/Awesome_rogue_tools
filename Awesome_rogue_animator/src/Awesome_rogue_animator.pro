@@ -13,13 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    qsfmlcanvas.cpp \
-    animationlist.cpp \
     animation.cpp \
     utilities.cpp \
-    animationwindow.cpp \
-    animationpreview.cpp \
-    animationtextureview.cpp \
     quadrender.cpp \
     transition.cpp \
     Conditions/andcondition.cpp \
@@ -35,18 +30,21 @@ SOURCES += main.cpp\
     Conditions/propertysuperiororequalcondition.cpp \
     Conditions/waitafteractivecondition.cpp \
     Conditions/waitcondition.cpp \
-    datas.cpp
+    datas.cpp \
+    UI/Animation/animationlist.cpp \
+    UI/Animation/animationpreview.cpp \
+    UI/Animation/animationtextureview.cpp \
+    UI/Animation/animationwindow.cpp \
+    UI/Animator/animatoranimationlist.cpp \
+    UI/Animator/animatorwindow.cpp \
+    UI/qsfmlcanvas.cpp \
+    UI/mainwindow.cpp
 
 HEADERS  += \
-    qsfmlcanvas.h \
-    animationlist.h \
     frame.h \
     animation.h \
     utilities.h \
-    animationwindow.h \
-    animationpreview.h \
     ressource.h \
-    animationtextureview.h \
     quadrender.h \
     transition.h \
     Conditions/andcondition.h \
@@ -62,7 +60,15 @@ HEADERS  += \
     Conditions/propertysuperiororequalcondition.h \
     Conditions/waitafteractivecondition.h \
     Conditions/waitcondition.h \
-    datas.h
+    datas.h \
+    UI/Animation/animationlist.h \
+    UI/Animation/animationpreview.h \
+    UI/Animation/animationtextureview.h \
+    UI/Animation/animationwindow.h \
+    UI/Animator/animatoranimationlist.h \
+    UI/Animator/animatorwindow.h \
+    UI/mainwindow.h \
+    UI/qsfmlcanvas.h
 
 CONFIG += c++14
 #QMAKE_CXXFLAGS += -Wsign-conversion
