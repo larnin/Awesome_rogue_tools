@@ -38,7 +38,8 @@ SOURCES += main.cpp\
     UI/Animator/animatoranimationlist.cpp \
     UI/Animator/animatorwindow.cpp \
     UI/qsfmlcanvas.cpp \
-    UI/mainwindow.cpp
+    UI/mainwindow.cpp \
+    UI/Animator/animatorcentralview.cpp
 
 HEADERS  += \
     frame.h \
@@ -68,7 +69,9 @@ HEADERS  += \
     UI/Animator/animatoranimationlist.h \
     UI/Animator/animatorwindow.h \
     UI/mainwindow.h \
-    UI/qsfmlcanvas.h
+    UI/qsfmlcanvas.h \
+    UI/Animator/animatorcentralview.h \
+    vect2convert.h
 
 CONFIG += c++14
 #QMAKE_CXXFLAGS += -Wsign-conversion

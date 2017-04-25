@@ -5,6 +5,7 @@ AnimatorWindow::AnimatorWindow(QWidget * parent)
     : QWidget(parent)
 {
     m_animationList = new AnimatorAnimationList();
+    m_centralView = new AnimatorCentralView();
 
     QWidget * verticalLine = new QWidget();
     verticalLine->setFixedWidth(1);
@@ -13,6 +14,7 @@ AnimatorWindow::AnimatorWindow(QWidget * parent)
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(m_animationList);
     layout->addWidget(verticalLine);
+    layout->addWidget(m_centralView, 1);
 
     setLayout(layout);
 }

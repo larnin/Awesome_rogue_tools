@@ -9,6 +9,8 @@ AnimatorAnimationList::AnimatorAnimationList(QWidget * parent)
     m_animationList = new QListWidget();
 
     QVBoxLayout *layout = new QVBoxLayout();
+    layout->setSpacing(0);
+    layout->setMargin(0);
     layout->addWidget(new QLabel("Animations"));
     layout->addWidget(m_animationList);
 

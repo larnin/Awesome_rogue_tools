@@ -2,6 +2,7 @@
 #define ANIMATORWINDOW_H
 
 #include "animatoranimationlist.h"
+#include "animatorcentralview.h"
 #include <QWidget>
 
 class AnimatorWindow : public QWidget
@@ -15,6 +16,7 @@ public slots:
     void onAnimationListChanged();
 private:
     AnimatorAnimationList * m_animationList;
+    AnimatorCentralView * m_centralView;
 };
 
 #endif // ANIMATORWINDOW_H
