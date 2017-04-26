@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QListWidget>
+#include <QSpinBox>
 
 class AnimatorAnimationList : public QWidget
 {
@@ -12,13 +13,16 @@ public:
 
 signals:
     void indexChanged(int);
+    void defaultStateChanged(int);
 
 public slots:
     void onAnimationListChanged();
+    void onDefaultStateChanged();
 
 private:
     void updateAnimationList();
     QListWidget * m_animationList;
+    QSpinBox * m_defaultState;
 };
 
 #endif // ANIMATORANIMATIONLIST_H

@@ -25,3 +25,10 @@ QJsonDocument load(const QString & filename)
         return QJsonDocument();
     return doc;
 }
+
+QPoint globalWidgetPos(QWidget * widget)
+{
+    if(widget->parentWidget() == nullptr)
+        return QPoint(widget->geometry().x(), widget->geometry().y());
+    return globalWidgetPos(widget->parentWidget()) + widget->pos();
+}

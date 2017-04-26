@@ -35,14 +35,14 @@ public:
     using std::vector<State>::pop_back;
     using std::vector<State>::erase;
 
-    inline Texture getTexture() const {return m_texture;}
+    Texture texture;
+    unsigned int startIndex;
 
 private:
-    Datas() = default;
-    Datas(const Datas &) = default;
-    Datas & operator =(const Datas &) = default;
+    Datas();
+    Datas(const Datas &) = delete;
+    Datas & operator =(const Datas &) = delete;
     static Datas m_instance;
-    Texture m_texture;
 };
 
 #endif // DATAS_H

@@ -6,11 +6,17 @@
 
 Datas Datas::m_instance;
 
+Datas::Datas()
+    : startIndex(0)
+{
+
+}
+
 void Datas::saveDatas(const QString & filename)
 {
     QJsonObject object;
-    if(m_texture.isValid())
-        object.insert("texture", QString::fromStdString(m_texture.name()));
+    if(texture.isValid())
+        object.insert("texture", QString::fromStdString(texture.name()));
     QJsonArray animations;
     for(const State & s : *this)
     {
@@ -35,7 +41,7 @@ void Datas::loadDatas(const QString & filename)
     if(!doc.isObject())
         return;
     QJsonObject object(doc.object());
-    m_texture.load(object["texture"].toString().toStdString());
+    texture.load(object["texture"].toString().toStdString());
     for(const auto & value : object["animations"].toArray())
     {
         auto objState(value.toObject());
