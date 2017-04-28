@@ -18,6 +18,7 @@ signals:
 public slots:
     void onAnimationListChanged();
     void onDefaultStateChanged();
+    void onItemSelectedChanged(int item);
 
 private:
     void updateAnimationList();

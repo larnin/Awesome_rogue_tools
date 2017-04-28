@@ -13,9 +13,12 @@ public:
 
 public slots:
     void onRightClick(QPoint p);
+    void onItemSelectedChanged(int item);
 
 signals:
     void defaultStateChanged(int);
+    void newTransition(int);
+    void selectedItemChanged(int);
 
 protected:
     virtual void OnUpdate() override;
@@ -28,6 +31,8 @@ private:
     void updateView();
     void moveItem(const sf::Vector2f & offset);
     sf::VertexArray drawGrid() const;
+    sf::VertexArray drawCurrentTransition();
+    void makeTransition(unsigned int start, unsigned int end);
 
     Font m_font;
     int m_selectedItem;
@@ -36,6 +41,10 @@ private:
 
     bool m_moveItem;
     unsigned int m_itemIndex;
+
+    bool m_makeTransition;
+    unsigned int m_transitionStartItem;
+
 };
 
 #endif // ANIMATORCENTRALVIEW_H

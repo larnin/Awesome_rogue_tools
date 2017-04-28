@@ -67,3 +67,10 @@ void AnimatorAnimationList::onDefaultStateChanged()
 
     m_defaultState->blockSignals(false);
 }
+
+void AnimatorAnimationList::onItemSelectedChanged(int item)
+{
+    m_animationList->blockSignals(true);
+    m_animationList->setCurrentRow(item);
+    m_animationList->blockSignals(false);
+}

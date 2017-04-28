@@ -16,10 +16,11 @@ const float gridSize(25);
 
 AnimatorCentralView::AnimatorCentralView(QWidget * parent)
     : QSFMLCanvas(20, parent)
-    , m_font("res/calibri.ttf")
+    , m_font("res/calibrib.ttf")
     , m_selectedItem(-1)
     , m_center(0, 0)
     , m_moveItem(false)
+    , m_makeTransition(false)
 {
     setMinimumHeight(100);
     setMinimumWidth(100);
@@ -69,6 +70,9 @@ void AnimatorCentralView::OnUpdate()
         }
     RenderWindow::draw(arrayTransitions);
 
+    if(m_makeTransition)
+        RenderWindow::draw(drawCurrentTransition());
+
     for(unsigned int i(0) ; i < Datas::instance().size() ; i++)
     {
         const State & s(Datas::instance()[i]);
@@ -92,7 +96,7 @@ void AnimatorCentralView::OnUpdate()
         rect.setSize(boxSize);
         RenderWindow::draw(rect);
 
-        sf::Text text(std::to_string(i) + " : " + s.animation.name, *m_font, 16);
+        sf::Text text(std::to_string(i) + " : " + s.animation.name, *m_font, 20);
         text.setFillColor(sf::Color::Black);
         text.setPosition(s.pos - sf::Vector2f(text.getGlobalBounds().width, text.getGlobalBounds().height)/2.0f - sf::Vector2f(text.getGlobalBounds().left, text.getGlobalBounds().top));
         text.setPosition(sf::Vector2f(sf::Vector2i(text.getPosition())));
@@ -111,7 +115,7 @@ void AnimatorCentralView::mouseMoveEvent(QMouseEvent *event)
     sf::Vector2f offset(event->pos().x() - m_oldMousePos.x, event->pos().y() - m_oldMousePos.y);
     if(m_moveItem)
         moveItem(offset);
-    else if(event->buttons().testFlag(Qt::LeftButton))
+    else if(event->buttons().testFlag(Qt::LeftButton) && ! m_makeTransition)
     {
         m_center -= offset;
         updateView();
@@ -126,6 +130,8 @@ void AnimatorCentralView::mousePressEvent(QMouseEvent *event)
 
     if(event->button() == Qt::LeftButton)
     {
+        if(m_makeTransition)
+            return;
         for(unsigned int i(0) ; i < Datas::instance().size() ; i++)
         {
             const State & s(Datas::instance()[i]);
@@ -134,6 +140,8 @@ void AnimatorCentralView::mousePressEvent(QMouseEvent *event)
             {
                 m_moveItem = true;
                 m_itemIndex = i;
+                m_selectedItem = i;
+                emit selectedItemChanged(i);
                 return;
             }
         }
@@ -142,8 +150,26 @@ void AnimatorCentralView::mousePressEvent(QMouseEvent *event)
 
 void AnimatorCentralView::mouseReleaseEvent(QMouseEvent * event)
 {
+    auto pos = RenderWindow::mapPixelToCoords(sf::Vector2i(event->pos().x(), event->pos().y()));
     if(event->button() == Qt::LeftButton)
+    {
         m_moveItem = false;
+
+        if(m_makeTransition)
+        {
+            m_makeTransition = false;
+            for(unsigned int i(0) ; i < Datas::instance().size() ; i++)
+            {
+                const State & s(Datas::instance()[i]);
+                sf::FloatRect rect(s.pos.x - boxSize.x/2, s.pos.y - boxSize.y/2, boxSize.x, boxSize.y);
+                if(rect.contains(pos))
+                {
+                    makeTransition(m_transitionStartItem, i);
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void AnimatorCentralView::updateView()
@@ -162,7 +188,6 @@ void AnimatorCentralView::moveItem(const sf::Vector2f & offset)
 
     Datas::instance()[m_itemIndex].pos += offset;
 }
-
 
 sf::VertexArray AnimatorCentralView::drawGrid() const
 {
@@ -271,6 +296,10 @@ void AnimatorCentralView::onRightClick(QPoint p)
     if(index < 0)
         return;
 
+
+    m_selectedItem = index;
+    emit selectedItemChanged(index);
+
     QAction *aTransition(nullptr), *aSetDefault(nullptr);
     QMenu menu;
     aTransition = menu.addAction("Ajouter une transition");
@@ -282,7 +311,8 @@ void AnimatorCentralView::onRightClick(QPoint p)
 
     if(action == aTransition)
     {
-        //todo !
+        m_makeTransition = true;
+        m_transitionStartItem = index;
     }
     else if(action == aSetDefault)
     {
@@ -292,3 +322,35 @@ void AnimatorCentralView::onRightClick(QPoint p)
 
 }
 
+void AnimatorCentralView::onItemSelectedChanged(int item)
+{
+    m_selectedItem = item;
+}
+
+sf::VertexArray AnimatorCentralView::drawCurrentTransition()
+{
+    if(!m_makeTransition || m_transitionStartItem >= Datas::instance().size())
+        return sf::VertexArray();
+
+    sf::VertexArray array(sf::Lines);
+
+    const State & s = Datas::instance()[m_transitionStartItem];
+    array.append(sf::Vertex(s.pos, sf::Color::White));
+    array.append(sf::Vertex(RenderWindow::mapPixelToCoords(sf::Vector2i(m_oldMousePos)), sf::Color::White));
+    addOffsetAndArrowOnTransition(array);
+
+    return array;
+}
+
+void AnimatorCentralView::makeTransition(unsigned int start, unsigned int end)
+{
+    if(start == end)
+        return;
+
+    State & s(Datas::instance()[start]);
+    for(const Transition & t : s.transitions)
+        if(t.targetAnimationID == end)
+            return;
+
+    s.transitions.push_back(Transition(end, std::unique_ptr<Condition>()));
+}
