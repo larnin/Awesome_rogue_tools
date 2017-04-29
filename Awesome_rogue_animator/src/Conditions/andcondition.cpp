@@ -7,14 +7,9 @@ AndCondition::AndCondition()
 
 }
 
-void AndCondition::add(std::unique_ptr<Condition> & condition)
+void AndCondition::add(const shared_unique_ptr<Condition> & condition)
 {
-    m_conditions.emplace_back(std::move(condition));
-}
-
-void AndCondition::add(std::unique_ptr<Condition> && condition)
-{
-    m_conditions.emplace_back(std::move(condition));
+    m_conditions.emplace_back(condition);
 }
 
 void AndCondition::saveData(QJsonObject & o) const

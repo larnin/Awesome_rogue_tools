@@ -2,7 +2,17 @@
 #define CONDITION_H
 
 #include <QJsonObject>
+#include <QWidget>
 #include <memory>
+
+template <typename T>
+using shared_unique_ptr = std::shared_ptr<std::unique_ptr<T>>;
+
+template <typename U, typename T, typename ... Args>
+shared_unique_ptr<U> make_shared_unique(Args && ... args)
+{
+    return std::make_shared<std::unique_ptr<U>>(std::make_unique<T>(std::forward<Args>(args)...));
+}
 
 enum ConditionType
 {
@@ -29,10 +39,13 @@ public:
     QJsonObject save() const;
     inline ConditionType type() const {return m_conditionType;}
 
-    static std::unique_ptr<Condition> load(const QJsonObject & j);
+    static shared_unique_ptr<Condition> load(const QJsonObject & j);
 
     static void saveProperty(QJsonObject & obj, const std::string & property, int value);
-    static QJsonArray saveConditionList(const std::vector<std::unique_ptr<Condition> > & list);
+    static QJsonArray saveConditionList(const std::vector<shared_unique_ptr<Condition> > & list);
+
+    //virtual void draw(QWidget * parent) = 0;
+    //virtual void reset() = 0;
 
 protected:
     virtual void saveData(QJsonObject & o) const = 0;

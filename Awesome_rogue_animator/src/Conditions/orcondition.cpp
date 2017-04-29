@@ -7,14 +7,9 @@ OrCondition::OrCondition()
 
 }
 
-void OrCondition::add(std::unique_ptr<Condition> & condition)
+void OrCondition::add(const shared_unique_ptr<Condition> & condition)
 {
-    m_conditions.emplace_back(std::move(condition));
-}
-
-void OrCondition::add(std::unique_ptr<Condition> && condition)
-{
-    m_conditions.emplace_back(std::move(condition));
+    m_conditions.emplace_back(condition);
 }
 
 void OrCondition::saveData(QJsonObject & o) const

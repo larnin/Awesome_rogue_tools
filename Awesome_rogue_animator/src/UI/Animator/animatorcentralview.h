@@ -10,6 +10,7 @@ class AnimatorCentralView : public QSFMLCanvas
     Q_OBJECT
 public:
     AnimatorCentralView(QWidget * parent  = nullptr);
+    virtual ~AnimatorCentralView() = default;
 
 public slots:
     void onRightClick(QPoint p);

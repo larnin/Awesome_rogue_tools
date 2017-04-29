@@ -16,7 +16,7 @@ void QSFMLCanvas::showEvent(QShowEvent*)
 {
     if (!m_initialized)
     {
-        RenderWindow::create(reinterpret_cast<sf::WindowHandle>(winId()));
+        RenderWindow::create(reinterpret_cast<sf::WindowHandle>(winId()), sf::ContextSettings(0, 0, 4));
 
         connect(&m_timer, SIGNAL(timeout()), this, SLOT(repaint()));
         m_timer.start();

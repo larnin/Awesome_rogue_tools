@@ -10,14 +10,14 @@ class Transition
 {
 public:
     Transition(const QJsonObject & j);
-    Transition(unsigned int _targetAnimationID, std::unique_ptr<Condition> && _condition);
+    Transition(unsigned int _targetAnimationID, const shared_unique_ptr<Condition> & _condition);
     Transition(Transition &&) = default;
     Transition & operator =(Transition &&) = default;
 
     QJsonObject toJson() const;
 
     unsigned int targetAnimationID;
-    std::unique_ptr<Condition> condition;
+    shared_unique_ptr<Condition> condition;
 };
 
 #endif // TRANSITION_H

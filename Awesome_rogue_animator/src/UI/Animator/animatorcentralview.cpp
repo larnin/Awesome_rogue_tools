@@ -2,6 +2,7 @@
 #include "datas.h"
 #include "vect2convert.h"
 #include "utilities.h"
+#include "Conditions/propertyequalcondition.h"
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
@@ -352,5 +353,6 @@ void AnimatorCentralView::makeTransition(unsigned int start, unsigned int end)
         if(t.targetAnimationID == end)
             return;
 
-    s.transitions.push_back(Transition(end, std::unique_ptr<Condition>()));
+    s.transitions.push_back(Transition(end, make_shared_unique<Condition, PropertyEqualCondition>("", 0)));
+    emit newTransition(start);
 }

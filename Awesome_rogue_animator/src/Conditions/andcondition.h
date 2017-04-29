@@ -10,14 +10,13 @@ class AndCondition : public Condition
 public:
     AndCondition();
     virtual ~AndCondition() = default;
-    void add(std::unique_ptr<Condition> & condition);
-    void add(std::unique_ptr<Condition> && condition);
+    void add(const shared_unique_ptr<Condition> & condition);
 
 protected:
     virtual void saveData(QJsonObject & o) const override;
 
 private:
-    std::vector<std::unique_ptr<Condition>> m_conditions;
+    std::vector<shared_unique_ptr<Condition>> m_conditions;
 };
 
 #endif // ANDCONDITION_H

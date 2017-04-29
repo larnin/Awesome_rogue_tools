@@ -3,6 +3,7 @@
 
 #include "animatoranimationlist.h"
 #include "animatorcentralview.h"
+#include "animatortransitionstab.h"
 #include <QWidget>
 
 class AnimatorWindow : public QWidget
@@ -17,6 +18,7 @@ public slots:
 private:
     AnimatorAnimationList * m_animationList;
     AnimatorCentralView * m_centralView;
+    AnimatorTransitionsTab * m_transitionTab;
 };
 
 #endif // ANIMATORWINDOW_H

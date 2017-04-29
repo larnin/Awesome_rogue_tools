@@ -1,15 +1,8 @@
 #include "notcondition.h"
 
-NotCondition::NotCondition(std::unique_ptr<Condition> & condition)
+NotCondition::NotCondition(const shared_unique_ptr<Condition> & condition)
     : Condition(ConditionType::NOT_CONDITION)
-    , m_condition(std::move(condition))
-{
-
-}
-
-NotCondition::NotCondition(std::unique_ptr<Condition> && condition)
-    : Condition(ConditionType::NOT_CONDITION)
-    , m_condition(std::move(condition))
+    , m_condition(condition)
 {
 
 }
@@ -17,5 +10,5 @@ NotCondition::NotCondition(std::unique_ptr<Condition> && condition)
 void NotCondition::saveData(QJsonObject & o) const
 {
     if(m_condition)
-        o.insert("condition", m_condition->save());
+        o.insert("condition", (*m_condition)->save());
 }
