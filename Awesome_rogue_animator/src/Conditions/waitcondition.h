@@ -2,6 +2,9 @@
 #define WAITCONDITION_H
 
 #include "condition.h"
+#include <QVBoxLayout>
+#include <QDoubleSpinBox>
+#include <QLabel>
 
 class WaitCondition : public Condition
 {
@@ -13,12 +16,18 @@ public:
     virtual void draw(QWidget * parent) override;
     virtual void reset() override;
 
+public slots:
+    void onValueChange();
+
 protected:
     virtual void saveData(QJsonObject & o) const override;
 
 private:
     float m_totalTime;
-    float m_currentTime;
+
+    QVBoxLayout * m_principalLayout;
+    QDoubleSpinBox * m_timeWidget;
+    QLabel * m_label;
 };
 
 #endif // WAITCONDITION_H

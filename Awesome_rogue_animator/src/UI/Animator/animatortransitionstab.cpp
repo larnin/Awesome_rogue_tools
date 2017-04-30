@@ -13,6 +13,8 @@ AnimatorTransitionsTab::AnimatorTransitionsTab(QWidget * parent)
     m_condition = new ConditionHolder(std::make_shared<std::unique_ptr<Condition>>());
 
     QScrollArea * area = new QScrollArea();
+    area->setFrameShape(QFrame::NoFrame);
+    area->setWidgetResizable(true);
     area->setWidget(m_condition);
 
     QVBoxLayout * layout = new QVBoxLayout();
@@ -20,6 +22,7 @@ AnimatorTransitionsTab::AnimatorTransitionsTab(QWidget * parent)
     layout->addWidget(m_transitions);
     layout->addSpacing(5);
     layout->addWidget(new QLabel("Condition"));
+    layout->addSpacing(5);
     layout->addWidget(area, 1);
     layout->setSpacing(0);
     layout->setMargin(0);

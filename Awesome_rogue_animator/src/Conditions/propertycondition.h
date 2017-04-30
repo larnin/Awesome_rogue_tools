@@ -2,6 +2,10 @@
 #define PROPERTYCONDITION_H
 
 #include "condition.h"
+#include <QSpinBox>
+#include <QLineEdit>
+#include <QVBoxLayout>
+#include <QLabel>
 #include <string>
 
 class PropertyCondition : public Condition
@@ -17,9 +21,18 @@ protected:
     PropertyCondition(const std::string & property, int value, ConditionType type);
     virtual void saveData(QJsonObject & o) const override;
 
+public slots:
+    void onValueChange();
+
 private:
     std::string m_property;
     int m_value;
+
+    QLineEdit * m_propertyWidget;
+    QSpinBox * m_valueWidget;
+    QVBoxLayout * m_principalLayout;
+    QLabel * m_labelProperty;
+    QLabel * m_labelValue;
 };
 
 class PropertyEqualCondition : public PropertyCondition

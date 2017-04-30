@@ -14,22 +14,25 @@ ConditionHolder::ConditionHolder(shared_unique_ptr<Condition> c, QWidget * paren
     m_conditionType->addItem("Animation terminée");
     m_conditionType->addItem("Attendre");
     m_conditionType->addItem("Attendre après condition");
-    m_conditionType->addItem("Propriétée égale");
-    m_conditionType->addItem("Propriétée inégale");
-    m_conditionType->addItem("Propriétée inférieure");
-    m_conditionType->addItem("Propriétée inférieure ou égale");
-    m_conditionType->addItem("Propriétée supérieure");
-    m_conditionType->addItem("Propriétée supérieure ou égale");
+    m_conditionType->addItem("Propriété égale");
+    m_conditionType->addItem("Propriété inégale");
+    m_conditionType->addItem("Propriété inférieure");
+    m_conditionType->addItem("Propriété inférieure ou égale");
+    m_conditionType->addItem("Propriété supérieure");
+    m_conditionType->addItem("Propriété supérieure ou égale");
 
     m_conditionBorder = new QFrame();
     m_conditionBorder->setFrameShape(QFrame::StyledPanel);
 
     QHBoxLayout * typeLayout = new QHBoxLayout();
-    typeLayout->addWidget(new QLabel("Type :"));
+    typeLayout->addWidget(new QLabel("Type : "));
     typeLayout->addWidget(m_conditionType, 1);
 
     QVBoxLayout * layout = new QVBoxLayout();
+    layout->setSpacing(0);
+    layout->setMargin(0);
     layout->addLayout(typeLayout);
+    layout->addSpacing(5);
     layout->addWidget(m_conditionBorder);
 
     setLayout(layout);

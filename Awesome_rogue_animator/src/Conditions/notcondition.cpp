@@ -15,10 +15,22 @@ void NotCondition::saveData(QJsonObject & o) const
 
 void NotCondition::draw(QWidget * parent)
 {
+    m_conditionHolder = new ConditionHolder(m_condition);
+    m_label = new QLabel("Condition");
 
+    m_principalLayout = new QVBoxLayout();
+    m_principalLayout->addWidget(m_label);
+    m_principalLayout->addWidget(m_conditionHolder, 1);
+
+    parent->setLayout(m_principalLayout);
 }
 
 void NotCondition::reset()
 {
+    m_conditionHolder->hide();
+    delete m_conditionHolder;
+    m_label->hide();
+    delete m_label;
 
+    delete m_principalLayout;
 }

@@ -2,6 +2,8 @@
 #define ANIMATIONFINISHEDCONDITION_H
 
 #include "condition.h"
+#include <QVBoxLayout>
+#include <QLabel>
 
 class AnimationFinishedCondition : public Condition
 {
@@ -15,6 +17,10 @@ public:
 
 protected:
     virtual void saveData(QJsonObject &) const override;
+
+private:
+    QLabel * m_label;
+    QVBoxLayout * m_principalLayout;
 };
 
 #endif // ANIMATIONFINISHEDCONDITION_H

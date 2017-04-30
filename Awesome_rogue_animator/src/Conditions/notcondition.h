@@ -2,6 +2,9 @@
 #define NOTCONDITION_H
 
 #include "condition.h"
+#include "UI/conditionholder.h"
+#include <QLabel>
+#include <QVBoxLayout>
 #include <memory>
 
 class NotCondition : public Condition
@@ -19,6 +22,10 @@ protected:
 
 private:
     shared_unique_ptr<Condition> m_condition;
+
+    ConditionHolder * m_conditionHolder;
+    QLabel * m_label;
+    QVBoxLayout * m_principalLayout;
 };
 
 #endif // NOTCONDITION_H
