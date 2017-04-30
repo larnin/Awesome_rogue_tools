@@ -19,6 +19,9 @@ public:
     static int conditionTypeToIndex(ConditionType type);
     static ConditionType indexToConditionType(int index);
 
+public slots:
+    void onConditionTypeChange();
+
 private:
     void onConditionChange();
 

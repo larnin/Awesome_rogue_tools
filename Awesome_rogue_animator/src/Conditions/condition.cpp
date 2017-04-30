@@ -1,16 +1,10 @@
 #include "condition.h"
-#include "andcondition.h"
-#include "orcondition.h"
+#include "listcondition.h"
 #include "notcondition.h"
 #include "animationfinishedcondition.h"
 #include "waitcondition.h"
 #include "waitafteractivecondition.h"
-#include "propertyequalcondition.h"
-#include "propertynotequalcondition.h"
-#include "propertyinferiorcondition.h"
-#include "propertyinferiororequalcondition.h"
-#include "propertysuperiorcondition.h"
-#include "propertysuperiororequalcondition.h"
+#include "propertycondition.h"
 #include <QJsonArray>
 #include <utility>
 #include <string>
@@ -64,7 +58,7 @@ shared_unique_ptr<Condition> Condition::load(const QJsonObject & j)
     }
     case OR_CONDITION:
     {
-        auto condition =  std::make_unique<OrCondition>();
+        auto condition = std::make_unique<OrCondition>();
         for(auto & c : getConditionList(j))
             condition->add(c);
         return std::make_shared<std::unique_ptr<Condition>>(std::move(condition));
@@ -123,6 +117,39 @@ shared_unique_ptr<Condition> Condition::load(const QJsonObject & j)
     }
     default:
         return shared_unique_ptr<Condition>();
+    }
+}
+
+std::unique_ptr<Condition> Condition::create(ConditionType type)
+{
+    switch (type)
+    {
+    case AND_CONDITION:
+        return std::make_unique<AndCondition>();
+    case OR_CONDITION:
+        return std::make_unique<OrCondition>();
+    case NOT_CONDITION:
+        return std::make_unique<NotCondition>(make_shared_unique<Condition, PropertyEqualCondition>("", 0));
+    case ANIMATION_FINISHED_CONDITION:
+        return std::make_unique<AnimationFinishedCondition>();
+    case WAIT_CONDITION:
+        return std::make_unique<WaitCondition>(0);
+    case WAIT_AFTER_ACTIVE_CONDITION:
+        return std::make_unique<WaitAfterActiveCondition>(make_shared_unique<Condition, PropertyEqualCondition>("", 0), 0);
+    case PROPERTY_EQUAL_CONDITION:
+        return std::make_unique<PropertyEqualCondition>("", 0);
+    case PROPERTY_NOT_EQUAL_CONDITION:
+        return std::make_unique<PropertyNotEqualCondition>("", 0);
+    case PROPERTY_INFERIOR_CONDITION:
+        return std::make_unique<PropertyInferiorCondition>("", 0);
+    case PROPERTY_INFERIOR_OR_EQUAL_CONDITION:
+        return std::make_unique<PropertyInferiorOrEqualCondition>("", 0);
+    case PROPERTY_SUPERIOR_CONDITION:
+        return std::make_unique<PropertySuperiorCondition>("", 0);
+    case PROPERTY_SUPERIOR_OR_EQUAL_CONDITION:
+        return std::make_unique<PropertySuperiorOrEqualCondition>("", 0);
+    default:
+        return std::unique_ptr<Condition>();
     }
 }
 

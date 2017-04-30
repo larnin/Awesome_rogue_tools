@@ -12,3 +12,13 @@ void WaitCondition::saveData(QJsonObject & o) const
 {
     o.insert("time", m_totalTime);
 }
+
+void WaitCondition::draw(QWidget * parent)
+{
+
+}
+
+void WaitCondition::reset()
+{
+
+}

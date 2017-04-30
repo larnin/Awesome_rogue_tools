@@ -27,6 +27,8 @@ AnimatorTransitionsTab::AnimatorTransitionsTab(QWidget * parent)
     setLayout(layout);
 
     connect(m_transitions, SIGNAL(currentRowChanged(int)), this, SLOT(updateCondition()));
+
+    updateCondition();
 }
 
 void AnimatorTransitionsTab::updateTransitionList(bool resetIndex)
@@ -55,7 +57,22 @@ void AnimatorTransitionsTab::updateTransitionList(bool resetIndex)
 
 void AnimatorTransitionsTab::updateCondition()
 {
+    bool showCondition(false);
+    int index = m_transitions->currentRow();
+    if(m_currentStateIndex >= 0 && m_currentStateIndex < int(Datas::instance().size()))
+        if(index >= 0 && index < int(Datas::instance()[m_currentStateIndex].transitions.size()))
+            showCondition = true;
 
+   if(!showCondition)
+   {
+       m_condition->setDisabled(true);
+       m_condition->setCondition(std::make_shared<std::unique_ptr<Condition>>());
+   }
+   else
+   {
+       m_condition->setEnabled(true);
+       m_condition->setCondition(Datas::instance()[m_currentStateIndex].transitions[index].condition);
+   }
 }
 
 void AnimatorTransitionsTab::onAddTransition(int animationIndex)

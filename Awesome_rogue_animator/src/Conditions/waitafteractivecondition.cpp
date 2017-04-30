@@ -16,3 +16,13 @@ void WaitAfterActiveCondition::saveData(QJsonObject & o) const
         o.insert("condition", (*m_condition)->save());
     o.insert("time", m_totalTime);
 }
+
+void WaitAfterActiveCondition::draw(QWidget * parent)
+{
+
+}
+
+void WaitAfterActiveCondition::reset()
+{
+
+}

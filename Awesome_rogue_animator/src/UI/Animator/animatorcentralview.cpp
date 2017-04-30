@@ -2,7 +2,7 @@
 #include "datas.h"
 #include "vect2convert.h"
 #include "utilities.h"
-#include "Conditions/propertyequalcondition.h"
+#include "Conditions/propertycondition.h"
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/VertexArray.hpp>

@@ -12,3 +12,13 @@ void NotCondition::saveData(QJsonObject & o) const
     if(m_condition)
         o.insert("condition", (*m_condition)->save());
 }
+
+void NotCondition::draw(QWidget * parent)
+{
+
+}
+
+void NotCondition::reset()
+{
+
+}

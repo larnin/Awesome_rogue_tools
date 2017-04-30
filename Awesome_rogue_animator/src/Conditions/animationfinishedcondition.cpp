@@ -10,3 +10,13 @@ void AnimationFinishedCondition::saveData(QJsonObject &) const
 {
 
 }
+
+void AnimationFinishedCondition::draw(QWidget * parent)
+{
+
+}
+
+void AnimationFinishedCondition::reset()
+{
+
+}

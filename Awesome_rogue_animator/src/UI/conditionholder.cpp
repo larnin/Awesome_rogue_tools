@@ -34,11 +34,15 @@ ConditionHolder::ConditionHolder(shared_unique_ptr<Condition> c, QWidget * paren
 
     setLayout(layout);
 
+    connect(m_conditionType, SIGNAL(currentIndexChanged(int)), this, SLOT(onConditionTypeChange()));
+
     onConditionChange();
 }
 
 void ConditionHolder::setCondition(const shared_unique_ptr<Condition> & c)
 {
+    if(m_condition && *m_condition)
+        (*m_condition)->reset();
     m_condition = c;
     onConditionChange();
 }
@@ -48,9 +52,27 @@ void ConditionHolder::onConditionChange()
     m_conditionType->blockSignals(true);
 
     if(m_condition && *m_condition)
+    {
         m_conditionType->setCurrentIndex(conditionTypeToIndex((*m_condition)->type()));
+        (*m_condition)->draw(m_conditionBorder);
+    }
 
-    m_conditionType->blockSignals(true);
+    m_conditionType->blockSignals(false);
+}
+
+void ConditionHolder::onConditionTypeChange()
+{
+    if(!m_condition)
+        return;
+
+    if(*m_condition && indexToConditionType(m_conditionType->currentIndex()) == (*m_condition)->type())
+        return;
+
+    if(*m_condition)
+        (*m_condition)->reset();
+
+    *m_condition = Condition::create(indexToConditionType(m_conditionType->currentIndex()));
+    (*m_condition)->draw(m_conditionBorder);
 }
 
 int ConditionHolder::conditionTypeToIndex(ConditionType type)

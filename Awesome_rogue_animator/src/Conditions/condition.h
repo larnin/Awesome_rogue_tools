@@ -3,6 +3,7 @@
 
 #include <QJsonObject>
 #include <QWidget>
+#include <QObject>
 #include <memory>
 
 template <typename T>
@@ -30,8 +31,9 @@ enum ConditionType
     PROPERTY_SUPERIOR_OR_EQUAL_CONDITION = 35
 };
 
-class Condition
+class Condition : public QObject
 {
+    Q_OBJECT
 public:
     Condition(ConditionType type);
     virtual ~Condition() = default;
@@ -43,9 +45,10 @@ public:
 
     static void saveProperty(QJsonObject & obj, const std::string & property, int value);
     static QJsonArray saveConditionList(const std::vector<shared_unique_ptr<Condition> > & list);
+    static std::unique_ptr<Condition> create(ConditionType type);
 
-    //virtual void draw(QWidget * parent) = 0;
-    //virtual void reset() = 0;
+    virtual void draw(QWidget * parent) = 0;
+    virtual void reset() = 0;
 
 protected:
     virtual void saveData(QJsonObject & o) const = 0;

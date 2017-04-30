@@ -17,17 +17,9 @@ SOURCES += main.cpp\
     utilities.cpp \
     quadrender.cpp \
     transition.cpp \
-    Conditions/andcondition.cpp \
     Conditions/animationfinishedcondition.cpp \
     Conditions/condition.cpp \
     Conditions/notcondition.cpp \
-    Conditions/orcondition.cpp \
-    Conditions/propertyequalcondition.cpp \
-    Conditions/propertyinferiorcondition.cpp \
-    Conditions/propertyinferiororequalcondition.cpp \
-    Conditions/propertynotequalcondition.cpp \
-    Conditions/propertysuperiorcondition.cpp \
-    Conditions/propertysuperiororequalcondition.cpp \
     Conditions/waitafteractivecondition.cpp \
     Conditions/waitcondition.cpp \
     datas.cpp \
@@ -41,7 +33,9 @@ SOURCES += main.cpp\
     UI/mainwindow.cpp \
     UI/Animator/animatorcentralview.cpp \
     UI/Animator/animatortransitionstab.cpp \
-    UI/conditionholder.cpp
+    UI/conditionholder.cpp \
+    Conditions/listcondition.cpp \
+    Conditions/propertycondition.cpp
 
 HEADERS  += \
     frame.h \
@@ -50,17 +44,9 @@ HEADERS  += \
     ressource.h \
     quadrender.h \
     transition.h \
-    Conditions/andcondition.h \
     Conditions/animationfinishedcondition.h \
     Conditions/condition.h \
     Conditions/notcondition.h \
-    Conditions/orcondition.h \
-    Conditions/propertyequalcondition.h \
-    Conditions/propertyinferiorcondition.h \
-    Conditions/propertyinferiororequalcondition.h \
-    Conditions/propertynotequalcondition.h \
-    Conditions/propertysuperiorcondition.h \
-    Conditions/propertysuperiororequalcondition.h \
     Conditions/waitafteractivecondition.h \
     Conditions/waitcondition.h \
     datas.h \
@@ -75,7 +61,9 @@ HEADERS  += \
     UI/Animator/animatorcentralview.h \
     vect2convert.h \
     UI/Animator/animatortransitionstab.h \
-    UI/conditionholder.h
+    UI/conditionholder.h \
+    Conditions/listcondition.h \
+    Conditions/propertycondition.h
 
 CONFIG += c++14
 #QMAKE_CXXFLAGS += -Wsign-conversion
