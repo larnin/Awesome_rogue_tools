@@ -95,6 +95,8 @@ void ListCondition::onDelClicked()
 {
     if(m_conditions.empty())
         return;
+    if(m_conditions.back() && *(m_conditions.back()))
+        (*(m_conditions.back()))->reset();
     m_conditions.pop_back();
 
     m_widgets.back()->hide();
@@ -107,6 +109,4 @@ void ListCondition::onDelClicked()
         delete m_widgets.back();
         m_widgets.pop_back();
     }
-
-    delete m_principalLayout;
 }

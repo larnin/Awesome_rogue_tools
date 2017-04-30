@@ -18,9 +18,17 @@ signals:
 public slots:
     void onDeleteAnimation(unsigned int index);
 
+    void onNew();
+    void onLoad();
+    void onSave();
+    void onSaveAs();
+    void onBackColorChange();
+
 private:
     AnimationWindow * m_animationWindow;
     AnimatorWindow * m_animatorWindow;
+
+    QString m_filename;
 };
 
 #endif // MAINWINDOW_H

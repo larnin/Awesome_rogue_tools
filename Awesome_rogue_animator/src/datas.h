@@ -20,6 +20,7 @@ public:
     inline static Datas & instance() {return m_instance;}
     void saveDatas(const QString & filename);
     void loadDatas(const QString & filename);
+    void reset();
 
     using std::vector<State>::empty;
     using std::vector<State>::size;
@@ -34,6 +35,7 @@ public:
     using std::vector<State>::emplace_back;
     using std::vector<State>::pop_back;
     using std::vector<State>::erase;
+    using std::vector<State>::clear;
 
     Texture texture;
     unsigned int startIndex;

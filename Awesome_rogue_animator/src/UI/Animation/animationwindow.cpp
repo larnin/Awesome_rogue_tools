@@ -44,3 +44,17 @@ void AnimationWindow::onAnimationsSet()
 {
     m_animationList->onAnimationsSet();
 }
+
+void AnimationWindow::setTexture(Texture t)
+{
+    m_animationList->onTextureLoad(t);
+    m_animationPreview->onTextureChange(t);
+    m_animationTextureView->onTextureChange(t);
+}
+
+
+void AnimationWindow::setColor(sf::Color c)
+{
+    m_animationTextureView->setBackgroundColor(c);
+    m_animationPreview->setBackgroundColor(c);
+}

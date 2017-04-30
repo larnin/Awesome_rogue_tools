@@ -297,6 +297,7 @@ void AnimationList::onSelectTexture()
     m_texture.load(name.toStdString());
     m_textureText->setText(name);
     emit changeTexture(m_texture);
+    Datas::instance().texture = m_texture;
 }
 
 void AnimationList::onRightClickAnimations(QPoint point)
@@ -465,4 +466,10 @@ void AnimationList::onRightClickFrames(QPoint point)
     }
 
     emit changeAnimation(anim);
+}
+
+void AnimationList::onTextureLoad(Texture t)
+{
+    m_texture = t;
+    m_textureText->setText(QString::fromStdString(t.name()));
 }

@@ -27,7 +27,7 @@ void Datas::saveDatas(const QString & filename)
             transitions.append(t.toJson());
         anim.insert("transitions", transitions);
         anim.insert("posX", s.pos.x);
-        anim.insert("posy", s.pos.y);
+        anim.insert("posY", s.pos.y);
         animations.append(anim);
     }
     object.insert("animations", animations);
@@ -41,7 +41,10 @@ void Datas::loadDatas(const QString & filename)
     if(!doc.isObject())
         return;
     QJsonObject object(doc.object());
-    texture.load(object["texture"].toString().toStdString());
+    const auto & texObj = object.find("texture");
+    if(texObj != object.end())
+        texture.load(texObj->toString().toStdString());
+
     for(const auto & value : object["animations"].toArray())
     {
         auto objState(value.toObject());
@@ -52,4 +55,12 @@ void Datas::loadDatas(const QString & filename)
         back().pos.x = objState["posX"].toDouble();
         back().pos.y = objState["posY"].toDouble();
     }
+}
+
+
+void Datas::reset()
+{
+    clear();
+    startIndex = 0;
+    texture = Texture();
 }

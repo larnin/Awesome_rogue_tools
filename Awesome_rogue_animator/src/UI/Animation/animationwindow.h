@@ -19,6 +19,8 @@ signals:
     void animationRenamed(unsigned int index);
 public slots:
     void onAnimationsSet();
+    void setTexture(Texture t);
+    void setColor(sf::Color c);
 
 private:
     AnimationList * m_animationList;

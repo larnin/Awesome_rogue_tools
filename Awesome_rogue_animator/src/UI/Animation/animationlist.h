@@ -35,6 +35,7 @@ public slots:
     void onRightClickFrames(QPoint point);
     void onSelectTexture();
     void onAnimationsSet();
+    void onTextureLoad(Texture t);
 
 private:
     int currentAnimationIndex() const;
