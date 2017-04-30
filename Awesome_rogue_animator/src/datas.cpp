@@ -15,6 +15,7 @@ Datas::Datas()
 void Datas::saveDatas(const QString & filename)
 {
     QJsonObject object;
+    object.insert("start", (int)startIndex);
     if(texture.isValid())
         object.insert("texture", QString::fromStdString(texture.name()));
     QJsonArray animations;
@@ -44,6 +45,7 @@ void Datas::loadDatas(const QString & filename)
     const auto & texObj = object.find("texture");
     if(texObj != object.end())
         texture.load(texObj->toString().toStdString());
+    startIndex = object["start"].toInt();
 
     for(const auto & value : object["animations"].toArray())
     {
