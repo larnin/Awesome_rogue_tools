@@ -4,6 +4,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMenu>
+#include <QInputDialog>
 
 AnimatorTransitionsTab::AnimatorTransitionsTab(QWidget * parent)
     : QWidget(parent)
@@ -30,6 +32,9 @@ AnimatorTransitionsTab::AnimatorTransitionsTab(QWidget * parent)
     setLayout(layout);
 
     connect(m_transitions, SIGNAL(currentRowChanged(int)), this, SLOT(updateCondition()));
+
+    m_transitions->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_transitions, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onRightClickOnTransitionList(QPoint)));
 
     updateCondition();
 }
@@ -95,4 +100,51 @@ void AnimatorTransitionsTab::onStateIndexChange(int index)
 void AnimatorTransitionsTab::onAnimationListChanged()
 {
     updateTransitionList(false);
+}
+
+void AnimatorTransitionsTab::onRightClickOnTransitionList(QPoint point)
+{
+    if(m_currentStateIndex < 0 || m_currentStateIndex >= int(Datas::instance().size()))
+        return;
+
+    QPoint globalPos(m_transitions->viewport()->mapToGlobal(point));
+
+    QAction *aDel(nullptr), *aChange(nullptr);
+    QMenu menu;
+
+    auto index(m_transitions->currentRow());
+    if(index >= 0 && index < int(Datas::instance()[m_currentStateIndex].transitions.size()))
+    {
+        aDel = menu.addAction("Suprimer la transition");
+        aChange = menu.addAction("Changer l'objectif");
+    }
+    else return;
+
+    QAction* action = menu.exec(globalPos);
+    if(action == nullptr)
+        return;
+
+    State & s(Datas::instance()[m_currentStateIndex]);
+
+    if(action == aDel)
+    {
+        s.transitions.erase(std::next(s.transitions.begin(), index));
+        updateTransitionList(true);
+    }
+    if(action == aChange)
+    {
+        bool ok;
+        int value = QInputDialog::getInt(this, "Changer de destination", "Indiquer la nouvelle destination de la transition " + QString::fromStdString(s.animation.name)
+                             + " -> " + QString::fromStdString(Datas::instance()[s.transitions[index].targetAnimationID].animation.name)
+                             + " (" + QString::number(s.transitions[index].targetAnimationID) + ")", s.transitions[index].targetAnimationID, 0, 10000, 1, &ok);
+        if(!ok)
+            return;
+        if(value == m_currentStateIndex)
+            return;
+        for(const Transition & t : s.transitions)
+            if(int(t.targetAnimationID) == value)
+                return;
+        s.transitions[index].targetAnimationID = value;
+        updateTransitionList(false);
+    }
 }

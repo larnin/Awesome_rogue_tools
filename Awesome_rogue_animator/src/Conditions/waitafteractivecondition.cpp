@@ -46,6 +46,9 @@ void WaitAfterActiveCondition::draw(QWidget * parent)
 
 void WaitAfterActiveCondition::reset()
 {
+    if(m_condition && *m_condition)
+        (*m_condition)->reset();
+
     disconnect(m_timeWidget, SIGNAL(valueChanged(double)), 0, 0);
 
     m_conditionHolder->hide();

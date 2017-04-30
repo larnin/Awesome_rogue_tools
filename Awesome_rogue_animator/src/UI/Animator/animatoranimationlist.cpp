@@ -68,6 +68,16 @@ void AnimatorAnimationList::onDefaultStateChanged()
     m_defaultState->blockSignals(false);
 }
 
+void AnimatorAnimationList::onDefaultStateChangedOut(int index)
+{
+    m_defaultState->blockSignals(true);
+
+    m_defaultState->setValue(index);
+    onDefaultStateChanged();
+
+    m_defaultState->blockSignals(false);
+}
+
 void AnimatorAnimationList::onItemSelectedChanged(int item)
 {
     m_animationList->blockSignals(true);

@@ -56,6 +56,10 @@ void ListCondition::draw(QWidget * parent)
 
 void ListCondition::reset()
 {
+    for(auto & c : m_conditions)
+        if(c && *c)
+            (*c)->reset();
+
     disconnect(m_addButton, SIGNAL(clicked(bool)), 0, 0);
     disconnect(m_delButton, SIGNAL(clicked(bool)), 0, 0);
 

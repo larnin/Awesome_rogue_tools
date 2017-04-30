@@ -27,6 +27,9 @@ void NotCondition::draw(QWidget * parent)
 
 void NotCondition::reset()
 {
+    if(m_condition && *m_condition)
+        (*m_condition)->reset();
+
     m_conditionHolder->hide();
     delete m_conditionHolder;
     m_label->hide();

@@ -16,6 +16,7 @@ public:
 signals:
 
 public slots:
+    void onDeleteAnimation(unsigned int index);
 
 private:
     AnimationWindow * m_animationWindow;

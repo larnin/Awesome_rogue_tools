@@ -19,6 +19,7 @@ public slots:
     void onStateIndexChange(int index);
     void onAnimationListChanged();
     void updateCondition();
+    void onRightClickOnTransitionList(QPoint point);
 
 private:
     void updateTransitionList(bool resetIndex);

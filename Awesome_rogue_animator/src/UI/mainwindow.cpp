@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "datas.h"
 #include <QMdiArea>
+#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,6 +20,22 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(center);
 
     connect(m_animationWindow, SIGNAL(animationAdded()), m_animatorWindow, SLOT(onAnimationListChanged()));
-    connect(m_animationWindow, SIGNAL(animationDeleted(uint)), m_animatorWindow, SLOT(onAnimationListChanged()));
+    connect(m_animationWindow, SIGNAL(animationDeleted(uint)), this, SLOT(onDeleteAnimation(uint)));
     connect(m_animationWindow, SIGNAL(animationRenamed(uint)), m_animatorWindow, SLOT(onAnimationListChanged()));
+}
+
+void MainWindow::onDeleteAnimation(unsigned int index)
+{
+    if(index < Datas::instance().size())
+    {
+        for(State & s : Datas::instance())
+        {
+            s.transitions.erase(std::remove_if(s.transitions.begin(), s.transitions.end(), [index](const auto & t){return t.targetAnimationID == index;}), s.transitions.end());
+            for(Transition & t : s.transitions)
+                if(t.targetAnimationID > index)
+                    t.targetAnimationID--;
+        }
+    }
+
+    m_animatorWindow->onAnimationListChanged();
 }
