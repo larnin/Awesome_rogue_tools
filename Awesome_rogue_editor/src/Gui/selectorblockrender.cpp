@@ -1,10 +1,9 @@
-#include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include "selectorblockrender.h"
 #include "Map/blocktype.h"
 #include "Utilities/quadrender.h"
 #include "Utilities/configs.h"
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 SelectorBlockRender::SelectorBlockRender()
     : copyBuffer(sf::Vector2u(0, 0))

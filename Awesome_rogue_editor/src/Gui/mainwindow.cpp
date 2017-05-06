@@ -1,3 +1,5 @@
+#include "mainwindow.h"
+#include "newpaternwidget.h"
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
@@ -5,9 +7,6 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-
-#include "mainwindow.h"
-#include "newpaternwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -53,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
         QAction* aDrawGround = editMenu->addAction("Change le sol");
             aDrawGround->setCheckable(true);
             aDrawGround->setChecked(true);
+        QAction* aDrawTop = editMenu->addAction("Change le plafond");
+            aDrawTop->setCheckable(true);
+            aDrawTop->setChecked(true);
 
     QMenu* viewMenu = menuBar()->addMenu("&Vues");
         QAction* aShowGrid = viewMenu->addAction("Afficher la grille");
@@ -76,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(aDrawWall, SIGNAL(triggered(bool)), m_view, SLOT(setDrawWall(bool)));
     connect(aDrawGround, SIGNAL(triggered(bool)), m_view, SLOT(setDrawGround(bool)));
+    connect(aDrawTop, SIGNAL(triggered(bool)), m_view, SLOT(setDrawTop(bool)));
     connect(aShowGrid, SIGNAL(triggered(bool)), m_view, SLOT(setGridShow(bool)));
     connect(aColorGrid, SIGNAL(triggered()), this, SLOT(selectGridColor()));
     connect(aShowHitbox, SIGNAL(triggered(bool)), m_view, SLOT(showWallsHitbox(bool)));

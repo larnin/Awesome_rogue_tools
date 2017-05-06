@@ -1,12 +1,11 @@
 #ifndef BLOCKVIEW_H
 #define BLOCKVIEW_H
 
-#include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include "Gui/qsfmlcanvas.h"
 #include "Utilities/ressource.h"
 #include "Map/blocktype.h"
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class BlockView : public QSFMLCanvas
 {

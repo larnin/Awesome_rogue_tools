@@ -1,13 +1,12 @@
-#include <cmath>
+#include "patern.h"
+#include "map/blocktype.h"
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QJsonArray>
-
-#include "patern.h"
-#include "map/blocktype.h"
+#include <cmath>
 
 Patern::Patern(sf::Vector2u size, Block def)
     : type(Patern::RoomType::NORMAL_ROOM)

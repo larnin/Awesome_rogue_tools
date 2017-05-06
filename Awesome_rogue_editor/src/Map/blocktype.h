@@ -1,14 +1,15 @@
 #ifndef BLOCKTYPE_H
 #define BLOCKTYPE_H
 
-#include <vector>
 #include "block.h"
 #include "hitbox.h"
+#include <vector>
 
 enum TypeTile
 {
     TILE_GROUND,
     TILE_WALL,
+    TILE_TOP,
     TILE_OTHER
 };
 

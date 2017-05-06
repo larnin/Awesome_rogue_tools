@@ -1,7 +1,6 @@
 #include "oneblockview.h"
 #include "Utilities/quadrender.h"
 #include "Utilities/configs.h"
-
 #include <SFML/Graphics/VertexArray.hpp>
 
 OneBlockView::OneBlockView(QWidget * parent)
@@ -14,6 +13,10 @@ OneBlockView::OneBlockView(QWidget * parent)
     , m_wallRot(Rotation::ROT_0)
     , m_wallXFliped(false)
     , m_wallYFliped(false)
+    , m_topTileID(0)
+    , m_topRot(Rotation::ROT_0)
+    , m_topXFliped(false)
+    , m_topYFliped(false)
 {
 
 }
@@ -40,6 +43,19 @@ void OneBlockView::changeWallBlockOrientation(Rotation rot, bool xFliped, bool y
     m_wallRot = rot;
     m_wallXFliped = xFliped;
     m_wallYFliped = yFliped;
+}
+
+
+void OneBlockView::changeTopBlock(unsigned int tileID)
+{
+    m_topTileID = tileID;
+}
+
+void OneBlockView::changeTopBlockOrientation(Rotation rot, bool xFliped, bool yFLiped)
+{
+    m_topRot = rot;
+    m_topXFliped = xFliped;
+    m_topYFliped = yFLiped;
 }
 
 /*void OneBlockView::showEvent(QShowEvent* event)
@@ -76,10 +92,12 @@ void OneBlockView::OnUpdate()
         unsigned int tile(Configs::tiles.tileSize);
         sf::FloatRect groundRect(BlockType::texRect(m_groundTileID, tile, Configs::tiles.texture->getSize()));
         sf::FloatRect wallRect(BlockType::texRect(m_wallTileID, tile, Configs::tiles.texture->getSize()));
+        sf::FloatRect topRect(BlockType::texRect(m_topTileID, tile, Configs::tiles.texture->getSize()));
 
-        sf::VertexArray array(sf::Quads, 8);
+        sf::VertexArray array(sf::Quads, 12);
         drawQuad(&array[0], sf::FloatRect(-0.5, -0.5, 1, 1), groundRect, m_groundXFliped, m_groundYFliped, m_groundRot);
         drawQuad(&array[4], sf::FloatRect(-0.5, -0.5, 1, 1), wallRect, m_wallXFliped, m_wallYFliped, m_wallRot);
+        drawQuad(&array[8], sf::FloatRect(-0.5, -0.5, 1, 1), topRect, m_topXFliped, m_topYFliped, m_topRot);
         RenderWindow::draw(array, sf::RenderStates(Configs::tiles.texture()));
     }
 }
@@ -88,5 +106,6 @@ Block OneBlockView::toBlock() const
 {
     return Block(m_groundTileID, createOrientation(m_groundRot, m_groundXFliped, m_groundYFliped)
                  , m_wallTileID, createOrientation(m_wallRot, m_wallXFliped, m_wallYFliped)
-                 , transformData(BlockType::baseBoxCaractOf(m_wallTileID), m_wallRot, m_wallXFliped, m_wallYFliped));
+                 , transformData(BlockType::baseBoxCaractOf(m_wallTileID), m_wallRot, m_wallXFliped, m_wallYFliped)
+                 , m_topTileID, createOrientation(m_topRot, m_topXFliped, m_topYFliped));
 }

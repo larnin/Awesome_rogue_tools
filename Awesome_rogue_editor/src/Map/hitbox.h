@@ -1,10 +1,10 @@
 #ifndef HITBOX_H
 #define HITBOX_H
 
-#include <vector>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <vector>
 
 struct Line
 {

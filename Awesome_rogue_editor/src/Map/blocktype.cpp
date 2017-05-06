@@ -1,7 +1,7 @@
-#include <cassert>
 #include "blocktype.h"
 #include "Utilities/configs.h"
 #include <algorithm>
+#include <cassert>
 
 const float PI(3.14159f);
 
@@ -128,6 +128,8 @@ std::vector<unsigned int> BlockType::getID(TypeTile type)
 {
     if(type == TILE_GROUND)
         return Configs::tiles.groundIDs;
+    if(type == TILE_TOP)
+        return Configs::tiles.topIDs;
     std::vector<unsigned int> wallIds;
     for(const auto & item : Configs::tiles.walls)
         wallIds.push_back(item.id);

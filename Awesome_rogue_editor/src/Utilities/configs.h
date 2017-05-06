@@ -1,9 +1,9 @@
 #ifndef CONFIGS_H
 #define CONFIGS_H
 
-#include <QString>
-#include <SFML/Graphics/Color.hpp>
 #include "Gui/TileConfig/tileconfig.h"
+#include <SFML/Graphics/Color.hpp>
+#include <QString>
 
 class Configs
 {

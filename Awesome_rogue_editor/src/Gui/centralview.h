@@ -1,16 +1,14 @@
 #ifndef CENTRALVIEW_H
 #define CENTRALVIEW_H
 
-#include <vector>
-#include <memory>
-
 #include "Map/roomrender.h"
 #include "qsfmlcanvas.h"
 #include "cursorblockrender.h"
 #include "selectorblockrender.h"
 #include "Utilities/undoinfos.h"
-
 #include "grid.h"
+#include <vector>
+#include <memory>
 
 class CentralView : public QSFMLCanvas
 {
@@ -26,6 +24,7 @@ public slots:
     void setSelectedBlock(const Block & b);
     void setDrawWall(bool value);
     void setDrawGround(bool value);
+    void setDrawTop(bool value);
     void setGridShow(bool value);
     void setGridColor(const sf::Color & color);
     void undo();

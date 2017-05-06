@@ -1,6 +1,9 @@
 #ifndef TILECONFIGWIDGET_H
 #define TILECONFIGWIDGET_H
 
+#include "textureviewer.h"
+#include "tileconfig.h"
+#include "tileviewer.h"
 #include <QWidget>
 #include <QPushButton>
 #include <QLineEdit>
@@ -11,9 +14,6 @@
 #include <QComboBox>
 #include <QRadioButton>
 #include <QSpinBox>
-#include "textureviewer.h"
-#include "tileconfig.h"
-#include "tileviewer.h"
 
 class TileConfigWidget : public QWidget
 {
@@ -47,6 +47,7 @@ private:
 
     QLabel *m_tileLabel;
     QCheckBox *m_isGround;
+    QCheckBox *m_isTop;
     QGroupBox *m_isWall;
     QComboBox *m_wallBoxType;
     QRadioButton *m_rot0Box;

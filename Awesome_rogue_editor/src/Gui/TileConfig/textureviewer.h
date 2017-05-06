@@ -3,8 +3,9 @@
 
 #include "Gui/qsfmlcanvas.h"
 #include "Utilities/ressource.h"
-#include <SFML/Graphics/VertexArray.hpp>
 #include "Gui/grid.h"
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/System/Clock.hpp>
 
 class TextureViewer : public QSFMLCanvas
 {
@@ -32,7 +33,9 @@ private:
     Texture m_texture;
     Texture m_okTexture;
     unsigned int m_tileSize;
+    unsigned int m_selectedID;
     Grid m_grid;
+    sf::Clock m_clock;
 };
 
 #endif // TEXTUREVIEWER_H

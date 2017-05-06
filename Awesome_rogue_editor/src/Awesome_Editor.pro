@@ -46,7 +46,6 @@ HEADERS += \
     Map/patern.h \
     Map/roomrender.h \
     Gui/Dock/unclosabledock.h \
-    Utilities/extendstd.h \
     Utilities/matrix.h \
     Utilities/noncopiable.h \
     Utilities/quadrender.h \

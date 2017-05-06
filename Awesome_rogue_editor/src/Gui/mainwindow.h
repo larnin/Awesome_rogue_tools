@@ -1,14 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <vector>
-#include <memory>
-#include <QMainWindow>
-
 #include "centralview.h"
 #include "Dock/blockdock.h"
 #include "Dock/paternsdock.h"
 #include "Map/patern.h"
+#include <QMainWindow>
+#include <vector>
+#include <memory>
 
 class MainWindow : public QMainWindow
 {

@@ -1,10 +1,10 @@
+#include "paternsdock.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
 #include <QFrame>
 
-#include "paternsdock.h"
 
 PaternsDock::PaternsDock(QWidget * parent)
     : UnclosableDock("Paterns", parent)

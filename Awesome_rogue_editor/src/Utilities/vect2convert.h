@@ -1,8 +1,8 @@
 #ifndef VECT2CONVERT_H
 #define VECT2CONVERT_H
 
-#include <cmath>
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 
 inline float angle(const sf::Vector2f & vect)
 {

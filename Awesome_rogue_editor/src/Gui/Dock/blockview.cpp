@@ -1,10 +1,9 @@
-#include <QWheelEvent>
-#include <QMouseEvent>
-
 #include "blockview.h"
 #include "Utilities/quadrender.h"
-#include <iostream>
 #include "Utilities/configs.h"
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <iostream>
 
 BlockView::BlockView(QWidget * parent)
     : QSFMLCanvas(20, parent)

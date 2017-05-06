@@ -1,9 +1,9 @@
 #ifndef QSFMLCANVAS_H
 #define QSFMLCANVAS_H
 
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <QWidget>
 #include <QTimer>
-#include <SFML/Graphics.hpp>
 
 class QSFMLCanvas : public QWidget, public sf::RenderWindow
 {

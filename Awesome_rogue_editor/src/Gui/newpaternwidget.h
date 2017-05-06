@@ -1,11 +1,11 @@
 #ifndef NEWPATERNWIDGET_H
 #define NEWPATERNWIDGET_H
 
+#include "Dock/paternsdock.h"
 #include <QDialog>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QPushButton>
-#include "Dock/paternsdock.h"
 
 class NewPaternWidget : public QDialog
 {

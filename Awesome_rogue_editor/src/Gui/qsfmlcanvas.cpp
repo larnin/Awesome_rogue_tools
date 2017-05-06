@@ -1,5 +1,6 @@
-#include <QResizeEvent>
 #include "qsfmlcanvas.h"
+#include <SFML/Window/Event.hpp>
+#include <QResizeEvent>
 #include <iostream>
 
 QSFMLCanvas::QSFMLCanvas(unsigned int FrameTime, QWidget *parent)

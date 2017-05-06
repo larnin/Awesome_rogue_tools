@@ -18,6 +18,8 @@ public slots:
     void changeGroundBlockOrientation(Rotation rot, bool xFliped, bool yFliped);
     void changeWallBlock(unsigned int tileID);
     void changeWallBlockOrientation(Rotation rot, bool xFliped, bool yFliped);
+    void changeTopBlock(unsigned int tileID);
+    void changeTopBlockOrientation(Rotation rot, bool xFliped, bool yFLiped);
 
     Block toBlock() const;
 
@@ -36,6 +38,11 @@ private:
     Rotation m_wallRot;
     bool m_wallXFliped;
     bool m_wallYFliped;
+
+    unsigned int m_topTileID;
+    Rotation m_topRot;
+    bool m_topXFliped;
+    bool m_topYFliped;
 };
 
 #endif // ONEBLOCKVIEW_H

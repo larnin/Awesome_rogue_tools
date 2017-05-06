@@ -1,11 +1,10 @@
-#include <algorithm>
+#include "Utilities/configs.h"
+#include "centralview.h"
+#include "Map/blocktype.h"
+#include <SFML/Window/Mouse.hpp>
 #include <QWheelEvent>
 #include <QCursor>
-#include <Map/blocktype.h>
-#include <SFML/Window/Mouse.hpp>
-#include "Utilities/configs.h"
-
-#include "centralview.h"
+#include <algorithm>
 
 CentralView::CentralView(QWidget * parent)
     : QSFMLCanvas(20, parent)
@@ -71,11 +70,7 @@ void CentralView::mousePressEvent(QMouseEvent * event)
                 m_selector.setPos1(sf::Vector2u(cursorPos));
             }
         }
-        else
-        {
-
-        placeBlock(RenderWindow::mapPixelToCoords(sf::Vector2i(event->localPos().x(), event->localPos().y())));
-        }
+        else placeBlock(RenderWindow::mapPixelToCoords(sf::Vector2i(event->localPos().x(), event->localPos().y())));
     }
 
     if(event->buttons() & Qt::RightButton)
@@ -175,6 +170,11 @@ void CentralView::setDrawGround(bool value)
     m_cursorBlock.drawGround = value;
 }
 
+void CentralView::setDrawTop(bool value)
+{
+    m_cursorBlock.drawTop = value;
+}
+
 void CentralView::placeBlock(sf::Vector2f cursorPos)
 {
     std::shared_ptr<Patern> pLock(m_render.getRoom().lock());
@@ -199,6 +199,16 @@ void CentralView::placeBlock(sf::Vector2f cursorPos)
             toAdd = true;
             (*pLock)(sf::Vector2u(blockPos)).groundID = m_cursorBlock.block.groundID;
             (*pLock)(sf::Vector2u(blockPos)).groundOrientation = m_cursorBlock.block.groundOrientation;
+        }
+    }
+    if(m_cursorBlock.drawTop)
+    {
+        if((*pLock)(sf::Vector2u(blockPos)).topID != m_cursorBlock.block.topID
+                || (*pLock)(sf::Vector2u(blockPos)).topOrientation != m_cursorBlock.block.topOrientation)
+        {
+            toAdd = true;
+            (*pLock)(sf::Vector2u(blockPos)).topID = m_cursorBlock.block.topID;
+            (*pLock)(sf::Vector2u(blockPos)).topOrientation = m_cursorBlock.block.topOrientation;
         }
     }
     if(m_cursorBlock.drawWall)
@@ -236,7 +246,11 @@ void CentralView::pickBlock(sf::Vector2f cursorPos)
     {
         m_cursorBlock.block.groundID = (*pLock)(sf::Vector2u(blockPos)).groundID;
         m_cursorBlock.block.groundOrientation = (*pLock)(sf::Vector2u(blockPos)).groundOrientation;
-
+    }
+    if(m_cursorBlock.drawTop)
+    {
+        m_cursorBlock.block.topID = (*pLock)(sf::Vector2u(blockPos)).topID;
+        m_cursorBlock.block.topOrientation = (*pLock)(sf::Vector2u(blockPos)).topOrientation;
     }
     if(m_cursorBlock.drawWall)
     {

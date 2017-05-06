@@ -1,8 +1,7 @@
+#include "newpaternwidget.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-
-#include "newpaternwidget.h"
 
 NewPaternWidget::NewPaternWidget(QWidget *parent)
     : QDialog(parent)

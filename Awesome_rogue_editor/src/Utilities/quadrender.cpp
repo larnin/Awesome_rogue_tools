@@ -1,5 +1,5 @@
-#include <utility>
 #include "quadrender.h"
+#include <utility>
 
 void drawQuad(sf::Vertex* quads, sf::FloatRect rect, sf::FloatRect texRect, bool xFliped, bool yFliped, Rotation rot)
 {

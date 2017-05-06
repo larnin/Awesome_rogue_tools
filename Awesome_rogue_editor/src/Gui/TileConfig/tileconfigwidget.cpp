@@ -1,10 +1,10 @@
 #include "tileconfigwidget.h"
+#include "Utilities/configs.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "Utilities/configs.h"
 #include <algorithm>
 
 TileConfigWidget::TileConfigWidget(QWidget * parent)
@@ -38,6 +38,7 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
     m_tileLabel->setFont(f);
 
     m_isGround = new QCheckBox("Bloc de sol");
+    m_isTop = new QCheckBox("Bloc de plafond");
     m_isWall = new QGroupBox("Bloc de mur");
     m_isWall->setCheckable(true);
     m_isWall->setChecked(false);
@@ -88,6 +89,7 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
     frameLayout->addWidget(m_tileLabel);
     frameLayout->addSpacing(10);
     frameLayout->addWidget(m_isGround);
+    frameLayout->addWidget(m_isTop);
     frameLayout->addSpacing(5);
     frameLayout->addWidget(m_isWall);
     QGroupBox* frame = new QGroupBox();
@@ -134,6 +136,7 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
     connect(m_tileSizeBox, SIGNAL(valueChanged(int)), this, SLOT(onTileSizeChanged(int)));
 
     connect(m_isGround, SIGNAL(toggled(bool)), this, SLOT(onValueChanged()));
+    connect(m_isTop, SIGNAL(toggled(bool)), this, SLOT(onValueChanged()));
     connect(m_isWall, SIGNAL(toggled(bool)), this, SLOT(onValueChanged()));
     connect(m_wallBoxType, SIGNAL(currentIndexChanged(int)), this, SLOT(onValueChanged()));
     connect(m_rot0Box, SIGNAL(clicked(bool)), this, SLOT(onValueChanged()));
@@ -148,6 +151,7 @@ void TileConfigWidget::onTileSelected(unsigned int id)
 {
     m_isGround->blockSignals(true);
     m_isWall->blockSignals(true);
+    m_isTop->blockSignals(true);
     m_wallBoxType->blockSignals(true);
     m_rot0Box->blockSignals(true);
     m_rot90Box->blockSignals(true);
@@ -159,9 +163,11 @@ void TileConfigWidget::onTileSelected(unsigned int id)
     m_tileLabel->setText("Tile ID : " + QString::number(m_currentTileID));
 
     auto itGround(std::find(Configs::tiles.groundIDs.begin(), Configs::tiles.groundIDs.end(), m_currentTileID));
+    auto isTop(std::find(Configs::tiles.topIDs.begin(), Configs::tiles.topIDs.end(), m_currentTileID));
     auto itWall(std::find_if(Configs::tiles.walls.begin(), Configs::tiles.walls.end(), [id](const auto & v){return v.id == id;}));
 
     m_isGround->setChecked(itGround != Configs::tiles.groundIDs.end());
+    m_isTop->setChecked(isTop != Configs::tiles.topIDs.end());
     if(itWall!= Configs::tiles.walls.end())
     {
         const TileWallInfo & tile(*itWall);
@@ -207,6 +213,7 @@ void TileConfigWidget::onTileSelected(unsigned int id)
 
     m_isGround->blockSignals(false);
     m_isWall->blockSignals(false);
+    m_isTop->blockSignals(false);
     m_wallBoxType->blockSignals(false);
     m_rot0Box->blockSignals(false);
     m_rot90Box->blockSignals(false);
@@ -232,6 +239,21 @@ void TileConfigWidget::onValueChanged()
         }
     }
 
+    if(m_isTop->isChecked())
+    {
+        if(std::find(Configs::tiles.topIDs.begin(), Configs::tiles.topIDs.end(), m_currentTileID) == Configs::tiles.topIDs.end())
+            Configs::tiles.topIDs.push_back(m_currentTileID);
+    }
+    else
+    {
+        auto it(std::find(Configs::tiles.topIDs.begin(), Configs::tiles.topIDs.end(), m_currentTileID));
+        if(it != Configs::tiles.topIDs.end())
+        {
+            std::swap(*it, Configs::tiles.topIDs.back());
+            Configs::tiles.topIDs.pop_back();
+        }
+    }
+
     unsigned int id(m_currentTileID);
     if(m_isWall->isChecked())
     {
@@ -252,6 +274,10 @@ void TileConfigWidget::onValueChanged()
         }
         m_wallViewer->setBlockInfo(m_currentTileID, EMPTY, ROT_0);
     }
+
+    std::sort(Configs::tiles.groundIDs.begin(), Configs::tiles.groundIDs.end());
+    std::sort(Configs::tiles.topIDs.begin(), Configs::tiles.topIDs.end());
+    std::sort(Configs::tiles.walls.begin(), Configs::tiles.walls.end(), [](const auto & a, const auto & b){return a.id < b.id;});
 
     emit tileConfigChanged();
 }

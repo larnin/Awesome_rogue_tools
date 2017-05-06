@@ -1,11 +1,11 @@
 #ifndef PATERN_H
 #define PATERN_H
 
+#include "Utilities/matrix.h"
+#include "Map/block.h"
 #include <vector>
 #include <array>
 #include <memory>
-#include "Utilities/matrix.h"
-#include "Map/block.h"
 
 class Patern
 {

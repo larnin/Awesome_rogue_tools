@@ -1,17 +1,16 @@
 #ifndef PATERNSDOCK_H
 #define PATERNSDOCK_H
 
-#include <string>
-#include <vector>
+#include "unclosabledock.h"
+#include "Map/patern.h"
+#include <SFML/System/Vector2.hpp>
 #include <QListWidget>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>
-#include <SFML/System/Vector2.hpp>
-
-#include "unclosabledock.h"
-#include "Map/patern.h"
+#include <string>
+#include <vector>
 
 struct PaternInfo
 {

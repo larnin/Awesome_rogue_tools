@@ -1,10 +1,10 @@
 #ifndef TILECONFIG_H
 #define TILECONFIG_H
 
-#include <QString>
-#include <vector>
 #include "Map/block.h"
 #include "Utilities/ressource.h"
+#include <QString>
+#include <vector>
 
 struct TileWallInfo
 {
@@ -25,6 +25,7 @@ struct TileConfig
     unsigned int tileSize;
     Texture texture;
     std::vector<unsigned int> groundIDs;
+    std::vector<unsigned int> topIDs;
     std::vector<TileWallInfo> walls;
 };
 

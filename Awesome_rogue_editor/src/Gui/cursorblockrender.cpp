@@ -1,12 +1,13 @@
 #include "cursorblockrender.h"
 #include "Map/blocktype.h"
 #include "Utilities/quadrender.h"
-#include <SFML/Graphics/RectangleShape.hpp>
 #include "Utilities/configs.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 CursorBlockRender::CursorBlockRender()
     : drawWall(true)
     , drawGround(true)
+    , drawTop(true)
 {
 
 }
@@ -34,6 +35,13 @@ void CursorBlockRender::draw(sf::RenderTarget & target, sf::RenderStates) const
             sf::FloatRect rect(BlockType::texRect(block.wallID, Configs::tiles.tileSize, Configs::tiles.texture->getSize()));
             drawQuad(&array[array.getVertexCount()-4], sf::FloatRect(mousePos, sf::Vector2f(Configs::tiles.tileSize, Configs::tiles.tileSize)), rect
                     , getXFlip(block.wallOrientation), getYFlip(block.wallOrientation), getRotation(block.wallOrientation));
+        }
+        if(drawTop)
+        {
+            array.resize(array.getVertexCount() + 4);
+            sf::FloatRect rect(BlockType::texRect(block.topID, Configs::tiles.tileSize, Configs::tiles.texture->getSize()));
+            drawQuad(&array[array.getVertexCount()-4], sf::FloatRect(mousePos, sf::Vector2f(Configs::tiles.tileSize, Configs::tiles.tileSize)), rect
+                    , getXFlip(block.topOrientation), getYFlip(block.topOrientation), getRotation(block.topOrientation));
         }
 
         float alpha(std::sin(10*m_clock.getElapsedTime().asSeconds())/8+0.4);

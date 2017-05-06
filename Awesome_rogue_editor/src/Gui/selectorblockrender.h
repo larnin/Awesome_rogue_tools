@@ -1,14 +1,14 @@
 #ifndef SELECTORBLOCKRENDER_H
 #define SELECTORBLOCKRENDER_H
 
+#include "Map/block.h"
+#include "Utilities/ressource.h"
+#include "Utilities/matrix.h"
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "Map/block.h"
-#include "Utilities/ressource.h"
-#include "Utilities/matrix.h"
 
 class SelectorBlockRender : public sf::Drawable
 {

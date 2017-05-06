@@ -1,10 +1,10 @@
 #ifndef UNDOINFOS_H
 #define UNDOINFOS_H
 
+#include "Map/block.h"
+#include <SFML/System/Vector2.hpp>
 #include <vector>
 #include <stack>
-#include <SFML/System/Vector2.hpp>
-#include "Map/block.h"
 
 struct BlockInfo
 {

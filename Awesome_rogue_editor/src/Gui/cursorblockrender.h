@@ -1,14 +1,13 @@
 #ifndef CURSORBLOCKRENDER_H
 #define CURSORBLOCKRENDER_H
 
+#include "Map/block.h"
+#include "Utilities/ressource.h"
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/System/Clock.hpp>
-
-#include "Map/block.h"
-#include "Utilities/ressource.h"
 
 class CursorBlockRender : public sf::Drawable
 {
@@ -23,6 +22,7 @@ public:
 
     bool drawWall;
     bool drawGround;
+    bool drawTop;
 
 private:
     sf::Clock m_clock;

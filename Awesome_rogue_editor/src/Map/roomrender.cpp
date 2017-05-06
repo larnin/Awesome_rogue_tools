@@ -1,8 +1,8 @@
-#include <SFML/Graphics/RectangleShape.hpp>
 #include "roomrender.h"
 #include "Utilities/quadrender.h"
 #include "blocktype.h"
 #include "Utilities/configs.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 RoomRender::RoomRender(std::weak_ptr<Patern> room)
     : m_render(sf::Quads)
@@ -68,6 +68,8 @@ unsigned int RoomRender::getNbSurfaces() const
                 nbDrawable++;
             if(b.wallID != 0)
                 nbDrawable++;
+            if(b.topID != 0)
+                nbDrawable++;
         }
     return nbDrawable;
 }
@@ -90,6 +92,13 @@ unsigned int RoomRender::drawBlock(sf::Vertex* quads, const Block & b, const sf:
         sf::FloatRect rect(BlockType::texRect(b.wallID, Configs::tiles.tileSize, Configs::tiles.texture->getSize()));
         drawQuad(quads+4*offset, sf::FloatRect(sf::Vector2f(globalPos)*tileSize-sf::Vector2f(tileSize, tileSize)/2.0f, sf::Vector2f(tileSize, tileSize))
                  , rect, getXFlip(b.wallOrientation), getYFlip(b.wallOrientation), getRotation(b.wallOrientation));
+        offset++;
+    }
+    if(b.topID != 0)
+    {
+        sf::FloatRect rect(BlockType::texRect(b.topID, Configs::tiles.tileSize, Configs::tiles.texture->getSize()));
+        drawQuad(quads+4*offset, sf::FloatRect(sf::Vector2f(globalPos)*tileSize-sf::Vector2f(tileSize, tileSize)/2.0f, sf::Vector2f(tileSize, tileSize))
+                 , rect, getXFlip(b.topOrientation), getYFlip(b.topOrientation), getRotation(b.topOrientation));
         offset++;
     }
 

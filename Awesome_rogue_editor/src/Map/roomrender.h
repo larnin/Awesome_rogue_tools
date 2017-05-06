@@ -1,13 +1,13 @@
 #ifndef ROOMRENDER_H
 #define ROOMRENDER_H
 
-#include <memory>
+#include "patern.h"
+#include "Utilities/ressource.h"
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
-#include "patern.h"
-#include "Utilities/ressource.h"
+#include <memory>
 
 class RoomRender : public sf::Drawable
 {
