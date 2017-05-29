@@ -36,7 +36,8 @@ SOURCES += main.cpp \
     Gui/TileConfig/textureviewer.cpp \
     Utilities/configs.cpp \
     Gui/TileConfig/tileconfig.cpp \
-    Gui/TileConfig/tileviewer.cpp
+    Gui/TileConfig/tileviewer.cpp \
+    light.cpp
 
 HEADERS += \
     Gui/mainwindow.h \
@@ -66,14 +67,23 @@ HEADERS += \
     Gui/TileConfig/textureviewer.h \
     Utilities/configs.h \
     Gui/TileConfig/tileconfig.h \
-    Gui/TileConfig/tileviewer.h
+    Gui/TileConfig/tileviewer.h \
+    light.h
 
 DEFINES += SFML_STATIC
 
 CONFIG += c++14
 #QMAKE_LFLAGS += -static-libgcc -static-libstdc++
 
-LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+#   --- HOME
+#LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+#INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+#DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+
+#   --- RUBIKA
+LIBS += -LC:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/lib
+INCLUDEPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
+DEPENDPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \
@@ -94,8 +104,5 @@ CONFIG(debug, debug|release): LIBS +=   -lsfml-graphics-s-d \
                                         -ljpeg \
                                         -lopengl32 \
                                         -lwinmm
-
-INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
 
 

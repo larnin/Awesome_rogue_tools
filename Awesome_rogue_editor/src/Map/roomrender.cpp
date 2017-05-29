@@ -15,6 +15,9 @@ RoomRender::RoomRender(std::weak_ptr<Patern> room)
 
 void RoomRender::redraw()
 {
+    if(!Configs::tiles.texture.isValid())
+        return;
+
     std::shared_ptr<Patern> r(m_room.lock());
     if(!r)
     {

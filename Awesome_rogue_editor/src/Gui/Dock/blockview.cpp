@@ -92,6 +92,9 @@ void BlockView::resizeEvent(QResizeEvent * event)
 void BlockView::drawTiles()
 {
     m_array.clear();
+    if(!Configs::tiles.texture.isValid())
+        return;
+
     std::vector<unsigned int> ids(BlockType::getID(m_type));
     m_array.resize(ids.size()*4);
 
