@@ -3,6 +3,7 @@
 
 #include "Utilities/matrix.h"
 #include "Map/block.h"
+#include "Map/light.h"
 #include <vector>
 #include <array>
 #include <memory>
@@ -30,6 +31,10 @@ public:
     const Block & operator()(const sf::Vector2u & pos) const;
     Patern transform(Rotation rot, bool flipX, bool flipY);
 
+    inline unsigned int lightCount() const {return m_lights.size();}
+    inline Light & light(int index) {return m_lights[index];}
+    inline const Light  & light(int index) const { return m_lights[index]; }
+
     static std::vector<std::shared_ptr<Patern>> load(const std::string & fileName);
     static void save(const std::string & fileName, const std::vector<std::shared_ptr<Patern>> & paterns);
 
@@ -45,6 +50,8 @@ private:
     static std::array<int,4> multiplyMatrice(const std::array<int,4> & left, const std::array<int,4> & right);
 
     Matrix<Block> m_blocks;
+
+    std::vector<Light> m_lights;
 };
 
 #endif // PATERN_H

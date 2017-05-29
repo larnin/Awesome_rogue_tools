@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     Utilities/configs.cpp \
     Gui/TileConfig/tileconfig.cpp \
     Gui/TileConfig/tileviewer.cpp \
-    light.cpp
+    Gui/Dock/lightsdock.cpp \
+    Map/light.cpp
 
 HEADERS += \
     Gui/mainwindow.h \
@@ -68,7 +69,8 @@ HEADERS += \
     Utilities/configs.h \
     Gui/TileConfig/tileconfig.h \
     Gui/TileConfig/tileviewer.h \
-    light.h
+    Gui/Dock/lightsdock.h \
+    Map/light.h
 
 DEFINES += SFML_STATIC
 

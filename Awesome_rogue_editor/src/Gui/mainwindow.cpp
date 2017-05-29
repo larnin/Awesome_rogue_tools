@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_paternsInfos = new PaternsDock();
     addDockWidget(Qt::RightDockWidgetArea, m_paternsInfos);
 
+    m_lights = new LightsDock();
+    addDockWidget(Qt::LeftDockWidgetArea, m_lights);
+
     m_view = new CentralView();
     m_view->setMinimumWidth(200);
     setCentralWidget(m_view);

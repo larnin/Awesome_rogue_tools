@@ -118,6 +118,10 @@ std::vector<std::shared_ptr<Patern>> Patern::load(const std::string & fileName)
             b.boxCaracts = block[4].toInt();
             p(pos) = b;
         }
+        QJsonArray lights(jsonPaternObject.value("lights").toArray());
+        for(const auto & l : lights)
+            p.m_lights.emplace_back(Light(l.toObject()));
+
         p.type = RoomType(jsonPaternObject.value("type").toInt());
         p.name = jsonPaternObject.value("name").toString().toStdString();
         p.rarity = jsonPaternObject.value("rarity").toInt();
@@ -151,7 +155,12 @@ void Patern::save(const std::string & fileName, const std::vector<std::shared_pt
             jsonBlock.append(b.boxCaracts);
             jsonBlocks.append(jsonBlock);
         }
+        QJsonArray jsonLights;
+        for(const Light & l : p.m_lights)
+            jsonLights.append(l.toJson());
+
         jsonPatern.insert("blocks", jsonBlocks);
+        jsonPatern.insert("lights", jsonLights);
         jsonPaterns.append(jsonPatern);
     }
     QFile file(QString::fromStdString(fileName));

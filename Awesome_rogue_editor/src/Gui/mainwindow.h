@@ -4,6 +4,7 @@
 #include "centralview.h"
 #include "Dock/blockdock.h"
 #include "Dock/paternsdock.h"
+#include "Dock/lightsdock.h"
 #include "Map/patern.h"
 #include <QMainWindow>
 #include <vector>
@@ -44,6 +45,7 @@ private:
     CentralView *m_view;
     BlockDock *m_blocks;
     PaternsDock *m_paternsInfos;
+    LightsDock * m_lights;
 
     std::vector<std::shared_ptr<Patern>> m_paterns;
     std::string m_fileName;
