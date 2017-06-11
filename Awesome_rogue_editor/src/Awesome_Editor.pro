@@ -38,7 +38,9 @@ SOURCES += main.cpp \
     Gui/TileConfig/tileconfig.cpp \
     Gui/TileConfig/tileviewer.cpp \
     Gui/Dock/lightsdock.cpp \
-    Map/light.cpp
+    Map/light.cpp \
+    Gui/lightholder.cpp \
+    Gui/lightframeholder.cpp
 
 HEADERS += \
     Gui/mainwindow.h \
@@ -70,7 +72,9 @@ HEADERS += \
     Gui/TileConfig/tileconfig.h \
     Gui/TileConfig/tileviewer.h \
     Gui/Dock/lightsdock.h \
-    Map/light.h
+    Map/light.h \
+    Gui/lightholder.h \
+    Gui/lightframeholder.h
 
 DEFINES += SFML_STATIC
 
@@ -78,14 +82,14 @@ CONFIG += c++14
 #QMAKE_LFLAGS += -static-libgcc -static-libstdc++
 
 #   --- HOME
-#LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
-#INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
-#DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+LIBS += -LC:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/lib
+INCLUDEPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
+DEPENDPATH += C:/Users/Nicolas/Programation/c++/SFML/DW2_2.4_(Qt)/include
 
 #   --- RUBIKA
-LIBS += -LC:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/lib
-INCLUDEPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
-DEPENDPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
+#LIBS += -LC:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/lib
+#INCLUDEPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
+#DEPENDPATH += C:/Users/n.laurent/Desktop/perso/SFML/SFML-2.4.0-SW2/include
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics-s \
                                         -lsfml-window-s \

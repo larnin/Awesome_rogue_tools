@@ -28,7 +28,8 @@ struct LightFrame
     sf::Color color;
     float radius;
     float yaw;
-    float pitch;
+    float pitch; //or angle for spot type
+    float intensity;
 };
 
 class Light
@@ -48,7 +49,13 @@ public:
     inline std::vector<LightFrame>::const_iterator end() const {return m_frames.end(); }
     inline std::vector<LightFrame>::iterator end() { return m_frames.end(); }
 
+    void add(const LightFrame & f);
+    void del(unsigned int index);
+    inline void clear() { m_frames.clear(); }
+
     float time() const;
+    inline LightType type() const { return m_type; }
+    inline void setType(LightType type) { m_type = type;}
 
     LightFrame at(float t) const;
 

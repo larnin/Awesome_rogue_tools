@@ -24,6 +24,7 @@ LightFrame::LightFrame(float _time)
     , radius(100)
     , yaw(0)
     , pitch(0)
+    , intensity(0)
 {
 
 }
@@ -33,6 +34,7 @@ LightFrame::LightFrame(const QJsonObject & obj)
     , radius(obj["radius"].toDouble())
     , yaw(obj["yaw"].toDouble())
     , pitch(obj["pitch"].toDouble())
+    , intensity(obj["intensity"].toDouble())
 {
     auto posObj(obj["pos"].toObject());
     pos = sf::Vector3f(posObj["x"].toDouble(), posObj["y"].toDouble(), posObj["z"].toDouble());
@@ -48,6 +50,7 @@ QJsonObject LightFrame::toJson() const
     obj.insert("radius", radius);
     obj.insert("yaw", yaw);
     obj.insert("pitch", pitch);
+    obj.insert("intensity", intensity);
     QJsonObject posObj;
     posObj.insert("x", pos.x);
     posObj.insert("y", pos.y);
@@ -90,6 +93,18 @@ QJsonObject Light::toJson() const
 float Light::time() const
 {
     return std::accumulate(m_frames.begin(), m_frames.end(), 0.0f, [](float a, const LightFrame & b){return a + b.time;});
+}
+
+void Light::add(const LightFrame & f)
+{
+    m_frames.push_back(f);
+}
+
+void Light::del(unsigned int index)
+{
+    if(index >= m_frames.size())
+        return;
+    m_frames.erase(std::next(m_frames.begin(), index));
 }
 
 LightFrame Light::at(float t) const
@@ -138,5 +153,6 @@ LightFrame Light::interpolate(const LightFrame & f1, const LightFrame &f2, float
                        , interpolate(f1.pos.z, f2.pos.z, lerp));
     f.radius = interpolate(f1.radius, f2.radius, lerp);
     f.yaw = interpolate(f1.yaw, f2.yaw, lerp);
+    f.intensity = interpolate(f1.intensity, f2.intensity, lerp);
     return f;
 }

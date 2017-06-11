@@ -33,7 +33,9 @@ public:
 
     inline unsigned int lightCount() const {return m_lights.size();}
     inline Light & light(int index) {return m_lights[index];}
-    inline const Light  & light(int index) const { return m_lights[index]; }
+    inline const Light & light(int index) const { return m_lights[index]; }
+    inline void addLight(const Light & l) { m_lights.push_back(l); }
+    inline void delLightAt(unsigned int index) { m_lights.erase(std::next(m_lights.begin(), index)); }
 
     static std::vector<std::shared_ptr<Patern>> load(const std::string & fileName);
     static void save(const std::string & fileName, const std::vector<std::shared_ptr<Patern>> & paterns);

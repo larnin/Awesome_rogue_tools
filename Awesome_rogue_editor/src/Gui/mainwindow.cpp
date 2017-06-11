@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_lights = new LightsDock();
     addDockWidget(Qt::LeftDockWidgetArea, m_lights);
+    tabifyDockWidget(m_blocks, m_lights);
+    setTabPosition(Qt::LeftDockWidgetArea, QTabWidget::North);
+    m_blocks->raise();
 
     m_view = new CentralView();
     m_view->setMinimumWidth(200);
@@ -152,6 +155,7 @@ void MainWindow::closeSlot()
 
     m_paterns.clear();
     m_view->setPatern(std::weak_ptr<Patern>());
+    m_lights->changeRoom(std::weak_ptr<Patern>());
     compilePaternsInfos();
     m_fileName.clear();
 }
@@ -175,6 +179,8 @@ void MainWindow::delPaternSlot(int id)
         return;
     m_paterns.erase(m_paterns.begin() + id);
     compilePaternsInfos();
+
+    m_lights->changeRoom(std::weak_ptr<Patern>());
 }
 
 void MainWindow::updatePaternSlot(int id, PaternInfo infos)
@@ -202,6 +208,7 @@ void MainWindow::updatePaternSlot(int id, PaternInfo infos)
         *p = pNew;
 
         m_view->setPatern(p);
+        m_lights->changeRoom(p);
     }
 
     p->name = infos.name;
@@ -242,6 +249,7 @@ void MainWindow::selectPaternSlot(int id)
         return;
 
     m_view->setPatern(m_paterns[id]);
+    m_lights->changeRoom(m_paterns[id]);
 }
 
 void MainWindow::returnAddPaternSlot(PaternInfo infos)
