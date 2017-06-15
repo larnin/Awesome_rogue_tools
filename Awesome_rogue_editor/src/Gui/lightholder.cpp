@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QGroupBox>
 
 LightHolder::LightHolder(Light & light, QWidget * parent)
     : QWidget(parent)
@@ -17,6 +18,7 @@ LightHolder::LightHolder(Light & light, QWidget * parent)
     m_frame = new QFrame();
     m_frame->setLayout(new QVBoxLayout());
     QScrollArea* area = new QScrollArea();
+    area->setWidgetResizable(true);
     area->setWidget(m_frame);
 
     m_addButton = new QPushButton("Ajouter frame");
@@ -48,22 +50,24 @@ void LightHolder::onLightTypeChange(int index)
     m_light.setType(LightType(index));
 
     initializeFrames();
+
+    emit lightChanged();
 }
 
 void LightHolder::onAddClicked()
 {
     m_light.add(LightFrame());
-    add(m_light.type(), m_light.frameCount()-1);
-
     m_delButton->setDisabled(m_light.frameCount() <= 1);
+
+    add(m_light.type(), m_light.frameCount()-1);
 }
 
 void LightHolder::onDelClicked()
 {
     m_light.del(m_light.frameCount()-1);
-    delLast();
-
     m_delButton->setDisabled(m_light.frameCount() <= 1);
+
+    delLast();
 }
 
 void LightHolder::initializeFrames()
@@ -92,12 +96,27 @@ void LightHolder::add(LightType type, unsigned int index)
     }
 
     if(widget != nullptr)
-        m_frame->layout()->addWidget(widget);
-}
+    {
+        QVBoxLayout *l = new QVBoxLayout();
+        l->addWidget(widget);
+        l->setContentsMargins(0, 0, 0, 0);
+        QGroupBox *f = new QGroupBox("Frame " + QString::number(index+1));
+        f->setLayout(l);
 
+        m_frame->layout()->addWidget(f);
+        m_widgets.push_back(f);
+    }
+
+    emit lightChanged();
+}
 
 void LightHolder::delLast()
 {
+    if(m_widgets.empty())
+        return;
+
     delete m_widgets.back();
     m_widgets.pop_back();
+
+    emit lightChanged();
 }

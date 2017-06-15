@@ -13,6 +13,9 @@ class LightHolder : public QWidget
 public:
     LightHolder(Light & light, QWidget * parent = nullptr);
 
+signals:
+    void lightChanged();
+
 public slots:
     void onLightTypeChange(int index);
     void onAddClicked();

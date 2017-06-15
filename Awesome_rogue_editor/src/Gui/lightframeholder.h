@@ -13,6 +13,10 @@ class FramePointLightHolder : public QWidget
 public:
     FramePointLightHolder(LightFrame & frame, QWidget * parent = nullptr);
 
+public slots:
+    void onValueChanged();
+    void onPickColor();
+
 private:
     LightFrame & m_frame;
 
@@ -32,6 +36,10 @@ class FrameDirectionnalLightHolder : public QWidget
 public:
     FrameDirectionnalLightHolder(LightFrame & frame, QWidget * parent = nullptr);
 
+public slots:
+    void onValueChanged();
+    void onPickColor();
+
 private:
     LightFrame & m_frame;
 
@@ -50,6 +58,10 @@ class FrameSpotLightHolder : public QWidget
 public:
     FrameSpotLightHolder(LightFrame & frame, QWidget * parent = nullptr);
 
+public slots:
+    void onValueChanged();
+    void onPickColor();
+
 private:
     LightFrame & m_frame;
 
@@ -60,8 +72,8 @@ private:
     QPushButton* m_colorPicker;
     QDoubleSpinBox* m_radiusWidget;
     QDoubleSpinBox* m_intensityWidget;
-    QDoubleSpinBox* m_yaw;
-    QDoubleSpinBox* m_angle;
+    QDoubleSpinBox* m_yawWidget;
+    QDoubleSpinBox* m_angleWidget;
 };
 
 #endif // LIGHTFRAMEHOLDER_H

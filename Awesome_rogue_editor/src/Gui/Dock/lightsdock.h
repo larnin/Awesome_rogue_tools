@@ -20,6 +20,7 @@ public slots:
     void onIndexChange(int index);
     void onAddClicked();
     void onDelClicked();
+    void onLightChange();
 
 private:
     void updateButtonsVisibility();

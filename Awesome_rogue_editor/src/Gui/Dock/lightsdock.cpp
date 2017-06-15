@@ -82,6 +82,7 @@ void LightsDock::onIndexChange(int index)
 
     if(m_lightHolder != nullptr)
     {
+        disconnect(m_lightHolder, SIGNAL(lightChanged()), 0, 0);
         delete m_lightHolder;
         m_lightHolder = nullptr;
     }
@@ -94,6 +95,7 @@ void LightsDock::onIndexChange(int index)
         return;
 
     m_lightHolder = new LightHolder(r->light(index));
+    connect(m_lightHolder, SIGNAL(lightChanged()), this, SLOT(onLightChange()));
     auto l(m_lightFrame->layout());
     if(l != nullptr)
         l->addWidget(m_lightHolder);
@@ -104,7 +106,9 @@ void LightsDock::onAddClicked()
     auto r(m_room.lock());
     if(!r)
         return;
-    r->addLight(Light(LightType::POINT));
+    Light l(LightType::POINT);
+    l.add(LightFrame());
+    r->addLight(l);
     updateLightList();
     m_lights->setCurrentRow(r->lightCount()-1);
 }
@@ -119,4 +123,13 @@ void LightsDock::onDelClicked()
         return;
     r->delLightAt(index);
     updateLightList();
+}
+
+void LightsDock::onLightChange()
+{
+    int row(m_lights->currentRow());
+    m_lights->blockSignals(true);
+    updateLightList();
+    m_lights->setCurrentRow(row);
+    m_lights->blockSignals(false);
 }
