@@ -14,6 +14,7 @@
 #include <QComboBox>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QDoubleSpinBox>
 
 class TileConfigWidget : public QWidget
 {
@@ -32,6 +33,10 @@ public slots:
     void onSearchTexture();
     void onImportClicked();
     void onExportClicked();
+
+    void onSearchNormal();
+    void onResetNormal();
+    void onMaterialValueChanged();
 
 private:
     TileWallInfo createTile() const;
@@ -57,6 +62,14 @@ private:
     TileViewer *m_wallViewer;
 
     unsigned int m_currentTileID;
+
+    QLineEdit *m_normalDirWidget;
+    QPushButton *m_searchNormalButton;
+    QPushButton *m_resetNormalButton;
+    QDoubleSpinBox *m_ambiantWidget;
+    QDoubleSpinBox *m_diffuseWidget;
+    QDoubleSpinBox *m_specularWidget;
+    QDoubleSpinBox *m_multiplierWidget;
 };
 
 #endif // TILECONFIGWIDGET_H

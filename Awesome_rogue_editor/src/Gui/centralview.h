@@ -32,9 +32,11 @@ public slots:
     void switchSelectionMode(bool state);
     void copy();
     void past();
+    void setDrawLights(bool value);
 
     void showWallsHitbox(bool value);
     void onTileConfigChanged();
+    void setAmbiant(float value);
 
 signals:
     void sendPickedBlock(const Block & b);
@@ -59,6 +61,8 @@ private:
     bool m_drawGrid;
     bool m_selectMode;
     bool m_showWalls;
+    bool m_showLights;
+    float m_ambiant;
 
     CursorBlockRender m_cursorBlock;
     SelectorBlockRender m_selector;

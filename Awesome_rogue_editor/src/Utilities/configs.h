@@ -17,6 +17,7 @@ public:
     static bool showGrid;
     static sf::Color gridColor;
     static bool showHitboxs;
+    static bool showLights;
     static TileConfig tiles;
 
 private:

@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QFrame>
 #include <QPushButton>
+#include <QDoubleSpinBox>
 #include <memory>
 
 class LightsDock : public UnclosableDock
@@ -22,6 +23,9 @@ public slots:
     void onDelClicked();
     void onLightChange();
 
+signals:
+    void ambiantChange(float);
+
 private:
     void updateButtonsVisibility();
     void updateLightList();
@@ -33,6 +37,7 @@ private:
     LightHolder *m_lightHolder;
     QPushButton *m_addButton;
     QPushButton *m_delButton;
+    QDoubleSpinBox *m_ambiantWidget;
 };
 
 #endif // LIGHTSDOCK_H

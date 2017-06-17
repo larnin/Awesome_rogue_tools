@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
         QAction* aColorGrid = viewMenu->addAction("Couleur de la grille");
         QAction* aShowHitbox = viewMenu->addAction("Afficher les murs");
             aShowHitbox->setCheckable(true);
+        QAction* aShowLights = viewMenu->addAction("Afficher les lumieres");
+            aShowLights->setCheckable(true);
 
     connect(aOpen, SIGNAL(triggered()), this, SLOT(openSlot()));
     connect(aSave, SIGNAL(triggered()), this, SLOT(saveSlot()));
@@ -88,9 +90,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(aShowGrid, SIGNAL(triggered(bool)), m_view, SLOT(setGridShow(bool)));
     connect(aColorGrid, SIGNAL(triggered()), this, SLOT(selectGridColor()));
     connect(aShowHitbox, SIGNAL(triggered(bool)), m_view, SLOT(showWallsHitbox(bool)));
+    connect(aShowLights, SIGNAL(triggered(bool)), m_view, SLOT(setDrawLights(bool)));
 
     connect(m_blocks, SIGNAL(changeBlock(Block)), m_view, SLOT(setSelectedBlock(Block)));
     connect(m_view, SIGNAL(sendPickedBlock(Block)), m_blocks, SLOT(blockPicked(Block)));
+    connect(m_lights, SIGNAL(ambiantChange(float)), m_view, SLOT(setAmbiant(float)));
 
     connect(m_paternsInfos, SIGNAL(addPatern()), this, SLOT(addPaternSlot()));
     connect(m_paternsInfos, SIGNAL(delPatern(int)), this, SLOT(delPaternSlot(int)));

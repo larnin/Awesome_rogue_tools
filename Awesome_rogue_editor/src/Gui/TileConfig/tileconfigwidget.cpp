@@ -2,6 +2,7 @@
 #include "Utilities/configs.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFormLayout>
 #include <QFrame>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -95,17 +96,65 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
     QGroupBox* frame = new QGroupBox();
     frame->setLayout(frameLayout);
     frame->setFixedWidth(250);
-    frame->setTitle("Configuration du bloc");
+    frame->setTitle("Configuration du bloc"); 
+
+    m_normalDirWidget = new QLineEdit(QString::fromStdString(Configs::tiles.material.normal.getFilename()));
+    m_searchNormalButton = new QPushButton("...");
+    m_searchNormalButton->setFixedWidth(40);
+    m_resetNormalButton = new QPushButton("Reset");
+    m_ambiantWidget = new QDoubleSpinBox();
+        m_ambiantWidget->setRange(0, 10);
+        m_ambiantWidget->setDecimals(2);
+        m_ambiantWidget->setSingleStep(0.1);
+        m_ambiantWidget->setValue(Configs::tiles.material.ambiantCoeficient);
+    m_diffuseWidget = new QDoubleSpinBox();
+        m_diffuseWidget->setRange(0, 10);
+        m_diffuseWidget->setDecimals(2);
+        m_diffuseWidget->setSingleStep(0.1);
+        m_diffuseWidget->setValue(Configs::tiles.material.diffuseCoefficient);
+    m_specularWidget = new QDoubleSpinBox();
+        m_specularWidget->setRange(0, 10);
+        m_specularWidget->setDecimals(2);
+        m_specularWidget->setSingleStep(0.1);
+        m_specularWidget->setValue(Configs::tiles.material.specularCoefficient);
+    m_multiplierWidget = new QDoubleSpinBox();
+        m_multiplierWidget->setRange(0, 10);
+        m_multiplierWidget->setDecimals(2);
+        m_multiplierWidget->setSingleStep(0.1);
+        m_multiplierWidget->setValue(Configs::tiles.material.specularMultiplier);
+    QHBoxLayout* normalLayout = new QHBoxLayout();
+    normalLayout->addWidget(new QLabel("Normal map :"));
+    normalLayout->addStretch(1);
+    normalLayout->addWidget(m_resetNormalButton);
+    QHBoxLayout* normal2Layout = new QHBoxLayout();
+    normal2Layout->addSpacing(10);
+    normal2Layout->addWidget(m_normalDirWidget, 1);
+    normal2Layout->addWidget(m_searchNormalButton);
+    QFormLayout* materialFormLayout = new QFormLayout();
+    materialFormLayout->addRow("Ambiant :", m_ambiantWidget);
+    materialFormLayout->addRow("Diffuse :", m_diffuseWidget);
+    materialFormLayout->addRow("Specular :", m_specularWidget);
+    materialFormLayout->addRow("Spec mull :", m_multiplierWidget);
+    QVBoxLayout* materialLayout = new QVBoxLayout();
+    materialLayout->addLayout(normalLayout);
+    materialLayout->addLayout(normal2Layout);
+    materialLayout->addSpacing(5);
+    materialLayout->addLayout(materialFormLayout);
+    QGroupBox* materialBox = new QGroupBox("Material");
+    materialBox->setLayout(materialLayout);
+
     QVBoxLayout* widgetsLayout = new QVBoxLayout();
     widgetsLayout->addLayout(buttonsLayout);
     widgetsLayout->addSpacing(10);
     widgetsLayout->addLayout(tileSizeLayout);
     widgetsLayout->addWidget(frame);
+    widgetsLayout->addWidget(materialBox);
     widgetsLayout->addStretch(1);
 
     m_textureDirWidget = new QLineEdit(QString::fromStdString(Configs::tiles.texture.getFilename()));
     m_textureDirWidget->setReadOnly(true);
     m_searchTextureButton = new QPushButton("...");
+    m_searchTextureButton->setFixedWidth(40);
     QHBoxLayout* textureStrLayout = new QHBoxLayout();
     textureStrLayout->addWidget(m_textureDirWidget, 1);
     textureStrLayout->addWidget(m_searchTextureButton);
@@ -329,6 +378,43 @@ void TileConfigWidget::onExportClicked()
     if(!fileName.endsWith(".json"))
         fileName += ".json";
     Configs::tiles.save(fileName);
+}
+
+void TileConfigWidget::onSearchNormal()
+{
+    QString fileName(QFileDialog::getOpenFileName(this, "Selectionner une normal map ..."));
+    if(fileName.isEmpty())
+        return;
+
+    Texture t(fileName.toStdString());
+    if(!t.isValid())
+    {
+        QMessageBox::information(this, "Normal map non chargée", "La normal map indiquée n'a pas pu etre chargée !");
+        return;
+    }
+
+    Configs::tiles.material.normal = t;
+    m_normalDirWidget->setText(fileName);
+
+    emit tileConfigChanged();
+}
+
+void TileConfigWidget::onResetNormal()
+{
+    Configs::tiles.material.normal = defaultNormalMap();
+    m_normalDirWidget->setText("");
+
+    emit tileConfigChanged();
+}
+
+void TileConfigWidget::onMaterialValueChanged()
+{
+    Configs::tiles.material.ambiantCoeficient = m_ambiantWidget->value();
+    Configs::tiles.material.diffuseCoefficient = m_diffuseWidget->value();
+    Configs::tiles.material.specularCoefficient = m_specularWidget->value();
+    Configs::tiles.material.specularMultiplier = m_multiplierWidget->value();
+
+    emit tileConfigChanged();
 }
 
 TileWallInfo TileConfigWidget::createTile() const

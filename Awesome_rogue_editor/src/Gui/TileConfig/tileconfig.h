@@ -6,6 +6,21 @@
 #include <QString>
 #include <vector>
 
+Texture defaultNormalMap();
+
+struct Material
+{
+    Material();
+    Material(Texture _normal);
+
+    Texture normal;
+
+    float ambiantCoeficient;
+    float diffuseCoefficient;
+    float specularCoefficient;
+    float specularMultiplier;
+};
+
 struct TileWallInfo
 {
     TileWallInfo(unsigned int _id, Rotation _rot, BoxType _hitbox)
@@ -27,6 +42,7 @@ struct TileConfig
     std::vector<unsigned int> groundIDs;
     std::vector<unsigned int> topIDs;
     std::vector<TileWallInfo> walls;
+    Material material;
 };
 
 #endif // TILECONFIG_H

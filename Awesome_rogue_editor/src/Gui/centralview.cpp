@@ -13,6 +13,8 @@ CentralView::CentralView(QWidget * parent)
     , m_drawGrid(false)
     , m_selectMode(false)
     , m_showWalls(false)
+    , m_showLights(false)
+    , m_ambiant(1.0f)
 {
     m_grid.setTileSize(Configs::tiles.tileSize);
     m_grid.setDelta(Configs::tiles.tileSize/2.0f);
@@ -175,6 +177,11 @@ void CentralView::setDrawTop(bool value)
     m_cursorBlock.drawTop = value;
 }
 
+void CentralView::setAmbiant(float value)
+{
+    m_ambiant = value;
+}
+
 void CentralView::placeBlock(sf::Vector2f cursorPos)
 {
     std::shared_ptr<Patern> pLock(m_render.getRoom().lock());
@@ -271,6 +278,11 @@ void CentralView::setGridShow(bool value)
 void CentralView::setGridColor(const sf::Color & color)
 {
     m_grid.setColor(color);
+}
+
+void CentralView::setDrawLights(bool value)
+{
+    m_showLights = value;
 }
 
 void CentralView::undo()

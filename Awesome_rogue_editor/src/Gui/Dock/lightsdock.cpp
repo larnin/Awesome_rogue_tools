@@ -8,6 +8,12 @@ LightsDock::LightsDock(QWidget *parent)
     : UnclosableDock("Lumieres", parent)
     , m_lightHolder(nullptr)
 {
+    m_ambiantWidget = new QDoubleSpinBox();
+    m_ambiantWidget->setRange(0, 10);
+    m_ambiantWidget->setDecimals(2);
+    m_ambiantWidget->setSingleStep(0.1);
+    m_ambiantWidget->setValue(1);
+
     m_lights = new QListWidget();
     m_lightFrame = new QFrame();
     m_lightFrame->setLayout(new QVBoxLayout());
@@ -19,7 +25,13 @@ LightsDock::LightsDock(QWidget *parent)
     buttonLayout->addWidget(m_addButton);
     buttonLayout->addWidget(m_delButton);
 
+    QHBoxLayout* ambiantLayout = new QHBoxLayout();
+    ambiantLayout->addWidget(new QLabel("Ambiant :"));
+    ambiantLayout->addWidget(m_ambiantWidget);
+
     QVBoxLayout* layout = new QVBoxLayout();
+    layout->addLayout(ambiantLayout);
+    layout->addSpacing(5);
     layout->addWidget(new QLabel("Lumieres :"));
     layout->addWidget(m_lights, 1);
     layout->addLayout(buttonLayout);
@@ -36,6 +48,7 @@ LightsDock::LightsDock(QWidget *parent)
     connect(m_lights, SIGNAL(currentRowChanged(int)), this, SLOT(onIndexChange(int)));
     connect(m_addButton, SIGNAL(clicked(bool)), this, SLOT(onAddClicked()));
     connect(m_delButton, SIGNAL(clicked(bool)), this, SLOT(onDelClicked()));
+    connect(m_ambiantWidget, SIGNAL(valueChanged(double)), this, SIGNAL(ambiantChange(float)));
 }
 
 void LightsDock::changeRoom(std::weak_ptr<Patern> room)

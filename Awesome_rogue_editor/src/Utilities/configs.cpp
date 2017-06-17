@@ -11,6 +11,7 @@ bool Configs::showGrid(false);
 sf::Color Configs::gridColor(sf::Color::White);
 bool Configs::showHitboxs(false);
 TileConfig Configs::tiles(tileConfigFilename);
+bool Configs::showLights(false);
 
 void Configs::load(const QString & filename)
 {
@@ -30,6 +31,7 @@ void Configs::load(const QString & filename)
 
     QJsonObject obj(doc.object());
     showGrid = obj.value("grid").toBool(false);
+    showLights = obj.value("lights").toBool(false);
     gridColor.r = abs(obj.value("gridr").toInt(255))%255;
     gridColor.g = abs(obj.value("gridg").toInt(255))%255;
     gridColor.b = abs(obj.value("gridb").toInt(255))%255;
@@ -40,6 +42,7 @@ void Configs::load(const QString & filename)
 void Configs::save(const QString & filename)
 {
     QJsonObject obj;
+    obj.insert("lights", showLights);
     obj.insert("grid", showGrid);
     obj.insert("gridr", gridColor.r);
     obj.insert("gridg", gridColor.g);

@@ -17,6 +17,13 @@ public:
         load(fileName);
     }
 
+    Ressource(const T & value)
+        : m_fileName("")
+        , m_ressource(std::make_shared<T>(value))
+    {
+
+    }
+
     Ressource(const Ressource & ressource)
         : m_fileName(ressource.m_fileName)
         , m_ressource(ressource.m_ressource)
