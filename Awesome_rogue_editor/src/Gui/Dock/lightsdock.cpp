@@ -1,18 +1,27 @@
 #include "lightsdock.h"
+#include "Utilities/configs.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QColorDialog>
+
+namespace
+{
+QIcon generateColor(const sf::Color & color)
+{
+    QPixmap pixmap(16, 16);
+    pixmap.fill(QColor(color.r, color.g, color.b, color.a));
+    return QIcon(pixmap);
+}
+}
 
 LightsDock::LightsDock(QWidget *parent)
     : UnclosableDock("Lumieres", parent)
     , m_lightHolder(nullptr)
 {
-    m_ambiantWidget = new QDoubleSpinBox();
-    m_ambiantWidget->setRange(0, 10);
-    m_ambiantWidget->setDecimals(2);
-    m_ambiantWidget->setSingleStep(0.1);
-    m_ambiantWidget->setValue(1);
+    m_ambiantWidget = new QPushButton(generateColor(Configs::tiles.ambiantColor), "");
+    m_ambiantWidget->setFixedWidth(25);
 
     m_lights = new QListWidget();
     m_lightFrame = new QFrame();
@@ -48,7 +57,7 @@ LightsDock::LightsDock(QWidget *parent)
     connect(m_lights, SIGNAL(currentRowChanged(int)), this, SLOT(onIndexChange(int)));
     connect(m_addButton, SIGNAL(clicked(bool)), this, SLOT(onAddClicked()));
     connect(m_delButton, SIGNAL(clicked(bool)), this, SLOT(onDelClicked()));
-    connect(m_ambiantWidget, SIGNAL(valueChanged(double)), this, SIGNAL(ambiantChange(float)));
+    connect(m_ambiantWidget, SIGNAL(clicked(bool)), this, SLOT(onAmbiantClicked()));
 }
 
 void LightsDock::changeRoom(std::weak_ptr<Patern> room)
@@ -146,3 +155,15 @@ void LightsDock::onLightChange()
     m_lights->setCurrentRow(row);
     m_lights->blockSignals(false);
 }
+
+void LightsDock::onAmbiantClicked()
+{
+    auto& color(Configs::tiles.ambiantColor);
+    QColor c (QColorDialog::getColor(QColor(color.r, color.g, color.b), this, "Couleur ambiante"));
+    if(!c.isValid())
+        return;
+
+    color = sf::Color(c.red(), c.green(), c.blue());
+    m_ambiantWidget->setIcon(generateColor(color));
+}
+

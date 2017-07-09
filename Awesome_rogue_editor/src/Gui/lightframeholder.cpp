@@ -17,11 +17,14 @@ void setSpinBox(QDoubleSpinBox & box, double min, double max, int decimal, doubl
     box.setValue(value);
 }
 
+namespace
+{
 QIcon generateColor(const sf::Color & color)
 {
     QPixmap pixmap(16, 16);
     pixmap.fill(QColor(color.r, color.g, color.b, color.a));
     return QIcon(pixmap);
+}
 }
 
 FramePointLightHolder::FramePointLightHolder(LightFrame & frame, QWidget * parent)
@@ -209,7 +212,7 @@ FrameSpotLightHolder::FrameSpotLightHolder(LightFrame & frame, QWidget * parent)
     setSpinBox(*m_yawWidget, -1000, 1000, 1, 1, frame.yaw * radToDeg);
     m_yawWidget->setMinimumWidth(50);
     m_angleWidget = new QDoubleSpinBox();
-    setSpinBox(*m_angleWidget, -1000, 1000, 1, 1, frame.pitch * radToDeg);
+    setSpinBox(*m_angleWidget, 0, 180, 1, 1, frame.pitch * radToDeg);
     m_angleWidget->setMinimumWidth(50);
 
     QHBoxLayout *timeLayout = new QHBoxLayout();

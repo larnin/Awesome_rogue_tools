@@ -69,7 +69,6 @@ private:
 
     UndoInfos m_undoList;
     UndoInfos m_redoList;
-
 };
 
 #endif // CENTRALVIEW_H

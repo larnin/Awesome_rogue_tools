@@ -129,9 +129,9 @@ unsigned int Light::frameIndex(float & t) const
     for(unsigned int i(0) ; i < m_frames.size() ; i++)
     {
         totalTime += m_frames[i].time;
-        if(totalTime > t)
+        if(totalTime >= t)
         {
-            t = totalTime - t;
+            t = t - totalTime + m_frames[i].time;
             return i;
         }
     }

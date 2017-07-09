@@ -9,7 +9,7 @@
 CentralView::CentralView(QWidget * parent)
     : QSFMLCanvas(20, parent)
     , m_zoomLevel(1)
-    , m_render(std::weak_ptr<Patern>())
+    , m_render(std::weak_ptr<Patern>(), false)
     , m_drawGrid(false)
     , m_selectMode(false)
     , m_showWalls(false)
@@ -138,7 +138,7 @@ void CentralView::resizeEvent(QResizeEvent * event)
 
 void CentralView::setPatern(std::weak_ptr<Patern> patern)
 {
-    m_render = RoomRender(patern);
+    m_render = std::move(RoomRender(patern, m_showLights));
     m_render.showWallsBoxs(m_showWalls);
 
     m_zoomLevel = 1;
@@ -283,6 +283,7 @@ void CentralView::setGridColor(const sf::Color & color)
 void CentralView::setDrawLights(bool value)
 {
     m_showLights = value;
+    m_render.setShowLights(value);
 }
 
 void CentralView::undo()

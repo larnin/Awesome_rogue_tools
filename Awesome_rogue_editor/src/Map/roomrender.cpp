@@ -2,15 +2,21 @@
 #include "Utilities/quadrender.h"
 #include "blocktype.h"
 #include "Utilities/configs.h"
+#include "Utilities/vect2convert.h"
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Glsl.hpp>
 
-RoomRender::RoomRender(std::weak_ptr<Patern> room)
+RoomRender::RoomRender(std::weak_ptr<Patern> room, bool showLights)
     : m_render(sf::Quads)
     , m_room(room)
     , m_showWallsBoxs(false)
     , m_wallsRender(sf::Lines)
+    , m_showLights(showLights)
 {
     redraw();
+
+    m_phong = std::make_unique<sf::Shader>();
+    m_phong->loadFromFile("res/shader/phong/2dmultilight.vert", "res/shader/phong/2dmultilight.frag");
 }
 
 void RoomRender::redraw()
@@ -40,6 +46,7 @@ void RoomRender::redraw()
 
 void RoomRender::draw(sf::RenderTarget & target, sf::RenderStates) const
 {
+    updateShader();
     std::shared_ptr<Patern> r(m_room.lock());
     if(r)
     {
@@ -49,10 +56,18 @@ void RoomRender::draw(sf::RenderTarget & target, sf::RenderStates) const
         target.draw(sharp);
 
         if(Configs::tiles.texture.isValid())
-            target.draw(m_render, sf::RenderStates(Configs::tiles.texture()));
+        {
+            sf::RenderStates states(Configs::tiles.texture());
+            if(m_showLights)
+                states.shader = m_phong.get();
+            target.draw(m_render, states);
+        }
 
         if(m_showWallsBoxs)
+        {
             target.draw(m_wallsRender);
+            target.draw(createLightsGismos());
+        }
     }
 }
 
@@ -140,4 +155,166 @@ void RoomRender::redrawWalls()
                 m_wallsRender.append(sf::Vertex((l.pos2+sf::Vector2f(i, j))*float(Configs::tiles.tileSize), sf::Color::Yellow));
             }
         }
+}
+
+void RoomRender::updateShader() const
+{
+    std::shared_ptr<Patern> r(m_room.lock());
+    if(!r)
+        return;
+
+    using sf::Glsl::Vec4;
+    using sf::Glsl::Vec3;
+
+    Vec4 material(Configs::tiles.material.ambiantCoeficient
+                , Configs::tiles.material.diffuseCoefficient
+                , Configs::tiles.material.specularCoefficient
+                , Configs::tiles.material.specularMultiplier);
+    m_phong->setUniform("material", material);
+    m_phong->setUniform("lightCount", (int)r->lightCount());
+    m_phong->setUniform("primaryTexture", *Configs::tiles.texture);
+    m_phong->setUniform("secondaryTexture", *Configs::tiles.material.normal);
+    m_phong->setUniform("ambiantColor", Vec4(Configs::tiles.ambiantColor));
+
+    std::vector<Vec4> lightsColor;
+    std::vector<Vec3> lightsPos;
+    std::vector<float> lightsType;
+    std::vector<Vec4> lightsParams;
+
+    float time(m_clock.getElapsedTime().asSeconds());
+
+    for(unsigned int i(0) ; i < r->lightCount() ; i++)
+    {
+        const auto & l(r->light(i));
+        const auto & f(l.at(time));
+
+        lightsType.push_back(l.type());
+        lightsColor.push_back(Vec4(f.color));
+        lightsPos.push_back(f.pos);
+        lightsParams.push_back(Vec4(f.radius, f.intensity, f.yaw, f.pitch));
+    }
+
+    m_phong->setUniformArray("lightColor", lightsColor.data(), lightsColor.size());
+    m_phong->setUniformArray("light", lightsPos.data(), lightsPos.size());
+    m_phong->setUniformArray("lightType", lightsType.data(), lightsType.size());
+    m_phong->setUniformArray("lightParams", lightsParams.data(), lightsParams.size());
+}
+
+namespace
+{
+void drawPoint(sf::VertexArray & array, const LightFrame & frame)
+{
+    sf::Vector2f pos(frame.pos.x, frame.pos.y);
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, -2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, -2), frame.color));
+
+    const unsigned int count = 50;
+    for(unsigned int i(0) ; i < count ; i++)
+    {
+        array.append(sf::Vertex(pos + toVect(frame.radius, float(M_PI)/count * i * 2), frame.color));
+        array.append(sf::Vertex(pos + toVect(frame.radius, float(M_PI)/count * (i+1) * 2), frame.color));
+    }
+}
+
+void drawSpot(sf::VertexArray & array, const LightFrame & frame)
+{
+    sf::Vector2f pos(frame.pos.x, frame.pos.y);
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, -2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, -2), frame.color));
+
+    float startAngle = frame.yaw - frame.pitch;
+    float endAngle = frame.yaw + frame.pitch;
+
+    array.append(sf::Vertex(pos, frame.color));
+    array.append(sf::Vertex(pos + toVect(frame.radius, startAngle), frame.color));
+    array.append(sf::Vertex(pos, frame.color));
+    array.append(sf::Vertex(pos + toVect(frame.radius, endAngle), frame.color));
+
+    const unsigned int count = 50;
+    const float delta(float(M_PI)/count * 2);
+    for(float i(startAngle) ; i < endAngle ; i += delta)
+    {
+        float end = std::min(i + delta, endAngle);
+
+        array.append(sf::Vertex(pos + toVect(frame.radius, i), frame.color));
+        array.append(sf::Vertex(pos + toVect(frame.radius, end), frame.color));
+    }
+}
+
+void drawDirectional(sf::VertexArray & array, const LightFrame & frame)
+{
+    sf::Vector2f pos(frame.pos.x, frame.pos.y);
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, -2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(-2, 2), frame.color));
+    array.append(sf::Vertex(pos - sf::Vector2f(2, -2), frame.color));
+
+    sf::Vector2f dir(toVect(25, frame.yaw));
+    array.append(sf::Vertex(pos, frame.color));
+    array.append(sf::Vertex(pos + dir, frame.color));
+    array.append(sf::Vertex(pos + dir, frame.color));
+    array.append(sf::Vertex(pos + dir + toVect(5, frame.yaw + 2.5f), frame.color));
+    array.append(sf::Vertex(pos + dir, frame.color));
+    array.append(sf::Vertex(pos + dir + toVect(5, frame.yaw - 2.5f), frame.color));
+}
+}
+
+sf::VertexArray RoomRender::createLightsGismos() const
+{
+    std::shared_ptr<Patern> r(m_room.lock());
+    if(!r)
+        return sf::VertexArray();
+
+    sf::VertexArray array(sf::Lines);
+
+    float time = m_clock.getElapsedTime().asSeconds();
+
+    for(unsigned int i(0) ; i < r->lightCount() ; i++)
+    {
+        const Light & l(r->light(i));
+
+        for(unsigned int j(0) ; j < l.frameCount() ; j++)
+        {
+            unsigned int last = j == 0 ? l.frameCount()-1 : j-1;
+            array.append(sf::Vertex(sf::Vector2f(l[j].pos.x, l[j].pos.y), sf::Color(l[j].color)));
+            array.append(sf::Vertex(sf::Vector2f(l[last].pos.x, l[last].pos.y), sf::Color(l[last].color)));
+
+            switch (l.type())
+            {
+            case LightType::POINT:
+                drawPoint(array, l[j]);
+            break;
+            case LightType::SPOT:
+                drawSpot(array, l[j]);
+
+            break;
+            case LightType::DIRECTIONNAL:
+                drawDirectional(array, l[j]);
+            break;
+            default:
+            break;
+            }
+        }
+
+        switch (l.type())
+        {
+        case LightType::POINT:
+            drawPoint(array, l.at(time));
+        break;
+        case LightType::SPOT:
+            drawSpot(array, l.at(time));
+
+        break;
+        case LightType::DIRECTIONNAL:
+            drawDirectional(array, l.at(time));
+        break;
+        default:
+        break;
+        }
+    }
+    return array;
 }

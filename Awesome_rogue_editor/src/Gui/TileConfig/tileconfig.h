@@ -43,6 +43,8 @@ struct TileConfig
     std::vector<unsigned int> topIDs;
     std::vector<TileWallInfo> walls;
     Material material;
+
+    sf::Color ambiantColor;
 };
 
 #endif // TILECONFIG_H

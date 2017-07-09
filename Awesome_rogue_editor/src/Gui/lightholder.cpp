@@ -12,8 +12,8 @@ LightHolder::LightHolder(Light & light, QWidget * parent)
 {
     m_lightType = new QComboBox();
     m_lightType->addItem(QString::fromStdString(lightName(LightType::POINT)));
-    m_lightType->addItem(QString::fromStdString(lightName(LightType::DIRECTIONNAL)));
     m_lightType->addItem(QString::fromStdString(lightName(LightType::SPOT)));
+    m_lightType->addItem(QString::fromStdString(lightName(LightType::DIRECTIONNAL)));
 
     m_frame = new QFrame();
     m_frame->setLayout(new QVBoxLayout());

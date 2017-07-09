@@ -22,6 +22,7 @@ public slots:
     void onAddClicked();
     void onDelClicked();
     void onLightChange();
+    void onAmbiantClicked();
 
 signals:
     void ambiantChange(float);
@@ -37,7 +38,7 @@ private:
     LightHolder *m_lightHolder;
     QPushButton *m_addButton;
     QPushButton *m_delButton;
-    QDoubleSpinBox *m_ambiantWidget;
+    QPushButton *m_ambiantWidget;
 };
 
 #endif // LIGHTSDOCK_H

@@ -33,6 +33,7 @@ Material::Material(Texture _normal)
 
 TileConfig::TileConfig()
     : tileSize(32)
+    , ambiantColor(sf::Color::White)
 {
 
 }

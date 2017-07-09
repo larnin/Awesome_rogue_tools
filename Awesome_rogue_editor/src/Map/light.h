@@ -9,9 +9,9 @@
 
 enum LightType
 {
-    POINT,
-    DIRECTIONNAL,
-    SPOT,
+    POINT = 0,
+    SPOT = 1,
+    DIRECTIONNAL = 2,
 };
 
 std::string lightName(LightType type);
