@@ -20,11 +20,12 @@ std::string lightName(LightType type)
 
 LightFrame::LightFrame(float _time)
     : time(_time)
+    , pos(0, 0, 100)
     , color(sf::Color::White)
     , radius(100)
     , yaw(0)
     , pitch(0)
-    , intensity(0)
+    , intensity(1)
 {
 
 }

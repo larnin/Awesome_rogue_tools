@@ -66,6 +66,7 @@ void LightsDock::changeRoom(std::weak_ptr<Patern> room)
     updateLightList();
 }
 
+#include <iostream>
 void LightsDock::updateButtonsVisibility()
 {
     if(m_room.expired())
@@ -83,6 +84,9 @@ void LightsDock::updateButtonsVisibility()
 
 void LightsDock::updateLightList()
 {
+
+    m_lights->blockSignals(true);
+    int index = m_lights->currentRow();
     m_lights->clear();
     auto r(m_room.lock());
     if(r)
@@ -93,6 +97,11 @@ void LightsDock::updateLightList()
             m_lights->addItem(QString::fromStdString(lightName(l.type())) + " " + QString::number(l.frameCount()));
         }
     }
+
+    m_lights->blockSignals(false);
+
+    if(m_lights->count() > index)
+        m_lights->setCurrentRow(index);
 
     updateButtonsVisibility();
 }
@@ -150,10 +159,8 @@ void LightsDock::onDelClicked()
 void LightsDock::onLightChange()
 {
     int row(m_lights->currentRow());
-    m_lights->blockSignals(true);
     updateLightList();
     m_lights->setCurrentRow(row);
-    m_lights->blockSignals(false);
 }
 
 void LightsDock::onAmbiantClicked()

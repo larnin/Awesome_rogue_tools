@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
         QAction* aShowGrid = viewMenu->addAction("Afficher la grille");
             aShowGrid->setCheckable(true);
         QAction* aColorGrid = viewMenu->addAction("Couleur de la grille");
-        QAction* aShowHitbox = viewMenu->addAction("Afficher les murs");
+        QAction* aShowHitbox = viewMenu->addAction("Afficher les gizmos");
             aShowHitbox->setCheckable(true);
         QAction* aShowLights = viewMenu->addAction("Afficher les lumieres");
             aShowLights->setCheckable(true);

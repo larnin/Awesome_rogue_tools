@@ -118,7 +118,7 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
         m_specularWidget->setSingleStep(0.1);
         m_specularWidget->setValue(Configs::tiles.material.specularCoefficient);
     m_multiplierWidget = new QDoubleSpinBox();
-        m_multiplierWidget->setRange(0, 10);
+        m_multiplierWidget->setRange(0, 100);
         m_multiplierWidget->setDecimals(2);
         m_multiplierWidget->setSingleStep(0.1);
         m_multiplierWidget->setValue(Configs::tiles.material.specularMultiplier);
@@ -192,6 +192,11 @@ TileConfigWidget::TileConfigWidget(QWidget * parent)
     connect(m_rot90Box, SIGNAL(clicked(bool)), this, SLOT(onValueChanged()));
     connect(m_rot180Box, SIGNAL(clicked(bool)), this, SLOT(onValueChanged()));
     connect(m_rot270Box, SIGNAL(clicked(bool)), this, SLOT(onValueChanged()));
+
+    connect(m_ambiantWidget, SIGNAL(valueChanged(double)), this, SLOT(onMaterialValueChanged()));
+    connect(m_diffuseWidget, SIGNAL(valueChanged(double)), this, SLOT(onMaterialValueChanged()));
+    connect(m_specularWidget, SIGNAL(valueChanged(double)), this, SLOT(onMaterialValueChanged()));
+    connect(m_multiplierWidget, SIGNAL(valueChanged(double)), this, SLOT(onMaterialValueChanged()));
 
     onTileSelected(0);
 }

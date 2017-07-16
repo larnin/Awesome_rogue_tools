@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     w.show();
 
     auto v(a.exec());
-    Configs::save(Configs::configsFilename);
+    if(v == 0)
+        Configs::save(Configs::configsFilename);
     return v;
 }

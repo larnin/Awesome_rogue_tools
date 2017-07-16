@@ -77,6 +77,8 @@ TileConfig::TileConfig(const QString & filename)
 
     QJsonObject jMat(obj.value("mat").toObject());
     material.normal.load(jMat.value("normal").toString().toStdString());
+    if(! material.normal.isValid())
+        material.normal = defaultNormalMap();
     material.ambiantCoeficient = jMat.value("ambiant").toDouble();
     material.diffuseCoefficient = jMat.value("diffuse").toDouble();
     material.specularCoefficient = jMat.value("specular").toDouble();

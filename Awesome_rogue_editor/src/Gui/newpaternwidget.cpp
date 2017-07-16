@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 NewPaternWidget::NewPaternWidget(QWidget *parent)
     : QDialog(parent)
@@ -48,6 +49,12 @@ NewPaternWidget::NewPaternWidget(QWidget *parent)
 
 void NewPaternWidget::validClicked()
 {
+    if(m_name->text().isEmpty())
+    {
+        QMessageBox::information(this, "Nom vide", "Veuillez indiquer un nom pour ce patern");
+        return;
+    }
+
     emit valid(PaternInfo(m_name->text().toStdString(), sf::Vector2u(m_sizeX->value(), m_sizeY->value()), Patern::RoomType::NORMAL_ROOM, 50));
     close();
 }
