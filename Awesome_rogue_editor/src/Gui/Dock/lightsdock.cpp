@@ -158,9 +158,28 @@ void LightsDock::onDelClicked()
 
 void LightsDock::onLightChange()
 {
-    int row(m_lights->currentRow());
-    updateLightList();
-    m_lights->setCurrentRow(row);
+    softUpdateLightList();
+}
+
+void LightsDock::softUpdateLightList()
+{
+    m_lights->blockSignals(true);
+    int index = m_lights->currentRow();
+    m_lights->clear();
+    auto r(m_room.lock());
+    if(r)
+    {
+        for(unsigned int i(0) ; i < r->lightCount() ; i++)
+        {
+            const auto & l(r->light(i));
+            m_lights->addItem(QString::fromStdString(lightName(l.type())) + " " + QString::number(l.frameCount()));
+        }
+    }
+
+    if(m_lights->count() > index)
+        m_lights->setCurrentRow(index);
+
+    m_lights->blockSignals(false);
 }
 
 void LightsDock::onAmbiantClicked()

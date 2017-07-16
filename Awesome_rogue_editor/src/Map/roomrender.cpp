@@ -253,7 +253,7 @@ void drawDirectional(sf::VertexArray & array, const LightFrame & frame)
     array.append(sf::Vertex(pos - sf::Vector2f(-2, 2), frame.color));
     array.append(sf::Vertex(pos - sf::Vector2f(2, -2), frame.color));
 
-    sf::Vector2f dir(toVect(25, frame.yaw));
+    sf::Vector2f dir(toVect(25 * abs(cos(frame.pitch)), frame.yaw));
     array.append(sf::Vertex(pos, frame.color));
     array.append(sf::Vertex(pos + dir, frame.color));
     array.append(sf::Vertex(pos + dir, frame.color));

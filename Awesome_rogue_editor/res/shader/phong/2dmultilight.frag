@@ -33,14 +33,38 @@ void point(vec3 normal, int i, out vec4 diffuse, out vec4 specular)
 
 void spot(vec3 normal, int i, out vec4 diffuse, out vec4 specular)
 {
-    diffuse = vec4(0.0, 0.0, 0.0, 0.0);
-    specular = vec4(0.0, 0.0, 0.0, 0.0);
+    if(lightParams[i].w <= 0.0)
+        return;
+
+    vec3 delta = vec3(position.xyz - light[i]);
+    vec2 dir = vec2(cos(lightParams[i].z), sin(lightParams[i].z));
+    float angle = acos(dot(normalize(dir), normalize(delta.xy)));
+
+    float l = length(delta.xy);
+    l = (lightParams[i].x - l) / lightParams[i].x;
+    if(l < 0.0)
+        return;
+    float m = (lightParams[i].w - abs(angle)) / lightParams[i].w;
+    if(m < 0.0)
+        return;
+
+    vec3 R = normalize(reflect(delta, normal));
+    vec3 V = vec3(0, 0, 1);
+
+    diffuse = max(0.0, dot(normal, normalize(delta))) * material.y * lightColor[i] * l * m * lightParams[i].y;
+    specular = max(0.0, pow(dot(R, V), material.w)) * material.z * lightColor[i] * l * m * lightParams[i].y;
 }
 
 void directional(vec3 normal, int i, out vec4 diffuse, out vec4 specular)
 {
-    diffuse = vec4(0.0, 0.0, 0.0, 0.0);
-    specular = vec4(0.0, 0.0, 0.0, 0.0);
+    vec3 delta = vec3(cos(lightParams[i].z)*cos(lightParams[i].w), sin(lightParams[i].z)*cos(lightParams[i].w), sin(lightParams[i].w));
+
+    vec3 R = normalize(reflect(delta, normal));
+    vec3 V = vec3(0, 0, 1);
+
+    diffuse = max(0.0, dot(normal, normalize(delta))) * material.y * lightColor[i] * lightParams[i].y;
+    if(delta.z < 0)
+        specular = max(0.0, pow(dot(R, V), material.w)) * material.z * lightColor[i] * lightParams[i].y;
 }
 
 void main()

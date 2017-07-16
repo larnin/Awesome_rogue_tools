@@ -30,6 +30,7 @@ signals:
 private:
     void updateButtonsVisibility();
     void updateLightList();
+    void softUpdateLightList();
 
     std::weak_ptr<Patern> m_room;
 
