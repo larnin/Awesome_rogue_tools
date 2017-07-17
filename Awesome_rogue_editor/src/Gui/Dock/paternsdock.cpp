@@ -108,7 +108,7 @@ void PaternsDock::updatePaternList(std::vector<PaternInfo> paterns)
 
     if(m_paternsWidget->count() == 0)
         m_paternsWidget->setCurrentRow(-1);
-    else if(m_paternsWidget->count() >= actualIndex)
+    else if(m_paternsWidget->count() <= actualIndex)
         m_paternsWidget->setCurrentRow(m_paternsWidget->count()-1);
     else m_paternsWidget->setCurrentRow(actualIndex);
 }
@@ -118,6 +118,7 @@ void PaternsDock::delClicked()
     int row(m_paternsWidget->currentRow());
     if(row >= m_paternsWidget->count() || row < 0 || row >= int(m_paternsInfo.size()))
         return;
+    selectedChanged(-1);
     emit delPatern(row);
 }
 
@@ -172,7 +173,17 @@ void PaternsDock::caracteristiqueChanged()
 
 void PaternsDock::selectedChanged(const QModelIndex & index)
 {
-    int row(index.row());
+    selectedChanged(index.row());
+
+}
+
+void PaternsDock::selectedChanged(int row)
+{
+    m_paternsWidget->blockSignals(true);
+    if(row != m_paternsWidget->currentRow())
+        m_paternsWidget->setCurrentRow(row);
+    m_paternsWidget->blockSignals(false);
+
     if(row >= m_paternsWidget->count() || row < 0 || row >= int(m_paternsInfo.size()))
     {
         m_paternFrame->setDisabled(true);

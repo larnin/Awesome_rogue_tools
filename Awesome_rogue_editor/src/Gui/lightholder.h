@@ -25,6 +25,7 @@ private:
     void initializeFrames();
     void add(LightType type, unsigned int index);
     void delLast();
+    void clearFrames();
 
     QComboBox * m_lightType;
     QFrame *m_frame;

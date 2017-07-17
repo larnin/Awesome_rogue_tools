@@ -39,6 +39,7 @@ public slots:
     void dupliqueClicked();
     void caracteristiqueChanged();
     void selectedChanged(const QModelIndex & index);
+    void selectedChanged(int row);
 
 signals:
     void addPatern();

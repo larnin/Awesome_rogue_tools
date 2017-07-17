@@ -59,7 +59,8 @@ void LightHolder::onAddClicked()
     m_light.add(LightFrame());
     m_delButton->setDisabled(m_light.frameCount() <= 1);
 
-    add(m_light.type(), m_light.frameCount()-1);
+    clearFrames();
+    initializeFrames();
 }
 
 void LightHolder::onDelClicked()
@@ -68,6 +69,8 @@ void LightHolder::onDelClicked()
     m_delButton->setDisabled(m_light.frameCount() <= 1);
 
     delLast();
+
+    emit lightChanged();
 }
 
 void LightHolder::initializeFrames()
@@ -117,6 +120,11 @@ void LightHolder::delLast()
 
     delete m_widgets.back();
     m_widgets.pop_back();
+}
 
-    emit lightChanged();
+void LightHolder::clearFrames()
+{
+    for(const auto & w : m_widgets)
+        delete w;
+    m_widgets.clear();
 }

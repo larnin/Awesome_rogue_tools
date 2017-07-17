@@ -263,7 +263,9 @@ void MainWindow::returnAddPaternSlot(PaternInfo infos)
     p.type = infos.type;
     p.rarity = infos.rarity;
     m_paterns.push_back(std::make_shared<Patern>(p));
+    selectPaternSlot(m_paterns.size()-1);
     compilePaternsInfos();
+    m_paternsInfos->selectedChanged(m_paterns.size()-1);
 }
 
 void MainWindow::selectGridColor()

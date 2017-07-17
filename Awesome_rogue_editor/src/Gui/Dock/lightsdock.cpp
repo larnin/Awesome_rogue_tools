@@ -102,6 +102,7 @@ void LightsDock::updateLightList()
 
     if(m_lights->count() > index)
         m_lights->setCurrentRow(index);
+    else onIndexChange(-1);
 
     updateButtonsVisibility();
 }
