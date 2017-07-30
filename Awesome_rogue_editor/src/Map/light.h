@@ -36,7 +36,7 @@ class Light
 {
 public:
     Light(LightType type);
-    Light(const QJsonObject obj);
+    Light(const QJsonObject & obj);
 
     QJsonObject toJson() const;
 

@@ -72,7 +72,7 @@ Light::Light(LightType type)
 
 }
 
-Light::Light(const QJsonObject obj)
+Light::Light(const QJsonObject & obj)
     : m_type(LightType(obj["type"].toInt()))
 {
     auto array(obj["frames"].toArray());
